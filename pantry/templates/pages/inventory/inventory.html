@@ -1,0 +1,33 @@
+{% extends 'pages/authenticated.html' %}
+
+{% block extra_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inventory/inventory.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search/search.css')}}">
+    <script defer src="{{ url_for('static', filename='js/inventory/inventory.js') }}"></script>
+{% endblock %}
+
+{% block main %}
+
+    {% include 'components/search.html' %}
+
+    <section class="inventory-section">
+        <div class="inventory-grid">
+            {% for item in inventory_items %}
+                <div class="inventory-card" id="{{ item.name }}">
+                    <img
+                        src="/static/images/placeholders/500x500.svg"
+                        alt="Grocery item"
+                        class="grid-item-image"
+                    />
+                    <h3 class="item-name">{{ item.name }}</h3>
+                </div>
+            {% else %}
+                <p class="no-items-message">No items in inventory.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="ingredient-page-container hidden"></div>
+
+{% endblock %}

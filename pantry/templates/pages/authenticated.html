@@ -1,0 +1,14 @@
+{% extends "pages/base.html" %}
+{% block title %}Pantry{% endblock %}
+
+{% block extra_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav/nav.css') }}">
+    <script defer src="{{ url_for('static', filename='js/nav/nav.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% include 'components/nav.html' %}
+    {% block main %}
+    {% endblock %}
+{% endblock %}

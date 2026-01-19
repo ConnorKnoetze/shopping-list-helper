@@ -1,0 +1,35 @@
+<div class="search-container">
+    <form action="{{ url_for('inventory_bp.inventory') }}" method="POST" class="search-form">
+        <input
+            type="text"
+            name="p"
+            class="search-input"
+            placeholder="Search for items..."
+            aria-label="Search"
+            value="{{ search_param }}"
+        />
+        <select
+            name="c"
+            class="search-filter"
+            aria-label="Search filter"
+        >
+            <option value="name" {% if search_criteria == 'name' %}selected{% endif %}>name</option>
+            <option value="category" {% if search_criteria == 'category' %}selected{% endif %}>category</option>
+        </select>
+        <button type="reset" class="reset-button" aria-label="Clear search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        <button type="submit" class="search-button" aria-label="Submit search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+        </button>
+    </form>
+    <script src="{{ url_for('static', filename='js/search/search.js') }}"></script>
+</div>

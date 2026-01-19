@@ -1,0 +1,14 @@
+{% extends 'pages/authenticated.html' %}
+
+{% block extra_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home/home.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/carousel/carousel.css')}}">
+    <script defer src="{{ url_for('static', filename='js/carousel/carousel.js') }}"></script>
+{% endblock %}
+
+{% block main %}
+<main class="home-content">
+    {% include 'components/carousel.html' %}
+</main>
+{% endblock %}

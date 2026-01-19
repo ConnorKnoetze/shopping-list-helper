@@ -1,0 +1,28 @@
+{% extends 'pages/authenticated.html' %}
+
+{% block extra_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shopping/shopping.css')}}">
+    <script defer src="{{ url_for('static', filename='js/shopping/shopping.js') }}"></script>
+{% endblock %}
+
+{% block main %}
+{#  A list of grocery items  #}
+    <section class="grocery-list-container">
+        <h2 class="section-title">Grocery List</h2>
+        {% if grocery_items %}
+            <button class="download-grocery-list-button" type="button" aria-label="Download grocery list as text file">Download List</button>
+        {% endif %}
+        <div class="grocery-list">
+            {% for item in grocery_items %}
+                <div class="grocery-item-card" id="{{ item.name }}">
+                    <p class="grocery-item-name">{{ item.name }}</p>
+                    <p class="grocery-item-quantity">Quantity: {{ item.quantity }} {{ item.unit }}</p>
+                    <button class="remove-item-button" name="{{ item.name }}" aria-label="Remove {{ item.name }} from grocery list">&times;</button>
+                </div>
+            {% else %}
+                <p class="no-items-message">No items in grocery list.</p>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

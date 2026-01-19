@@ -1,0 +1,15 @@
+{% extends 'pages/base.html' %}
+{% block extra_css %}
+    {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth/auth.css') }}">
+{% endblock %}
+{% block body %}
+<main class="auth-main">
+    <div class="auth-container">
+        <div class="auth-flex">
+            {% block auth_content %}
+            {% endblock %}
+        </div>
+    </div>
+</main>
+{% endblock %}

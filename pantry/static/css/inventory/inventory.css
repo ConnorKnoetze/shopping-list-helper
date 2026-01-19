@@ -1,0 +1,396 @@
+:root{
+    --inventory-card-bg: rgba(255, 255, 255, 0.8);
+    --toast-bg: #e8f7ef;
+    --toast-text-color: #0f172a;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --inventory-card-bg: rgba(0, 0, 0, 0.4);
+        --toast-bg: #2f4f3e;
+        --toast-text-color: #e8ece9;
+    }
+}
+
+.inventory-section{
+    margin: 10px 20px;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+.inventory-grid{
+    display: grid;
+    grid-template-columns: repeat(1, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.inventory-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--inventory-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 15px;
+    min-width: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+}
+
+.inventory-card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+}
+
+.inventory-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.item-name {
+    margin: 10px 0 0 0;
+    text-align: center;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    .inventory-grid{
+        grid-template-columns: repeat(1, minmax(200px, 1fr));
+    }
+}
+
+@media (min-width: 850px) {
+    .inventory-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 900px) {
+    .inventory-grid{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .inventory-grid{
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .inventory-grid{
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.ingredient-page-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ingredient-page-container.hidden{
+    display: none;
+}
+
+/* Modal alignment with site styling */
+.ingredient-page-backdrop{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45); /* slightly lighter for readability */
+    backdrop-filter: blur(6px) saturate(110%);
+    z-index: 1;
+}
+
+.ingredient-page-content{
+    position: relative;
+    z-index: 2;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 14px; /* match card radius style */
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+    transition: transform 200ms ease, box-shadow 200ms ease, opacity 200ms ease;
+    animation: ingredient-modal-enter 200ms ease-out;
+    padding: 30px;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    width: 90vw;
+}
+
+@keyframes ingredient-modal-enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Close button styling to match accent color micro-interactions */
+.close-ingredient-page-button{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--color-text);
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.close-ingredient-page-button:hover{
+    background-color: color-mix(in oklab, var(--color-accent) 15%, transparent);
+    transform: rotate(90deg) scale(1.05);
+}
+
+.close-ingredient-page-button svg{
+    width: 20px;
+    height: 20px;
+}
+
+.ingredient-page-inner-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.ingredient-page-image{
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.ingredient-page-name{
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-text);
+    text-align: center;
+    letter-spacing: 0.2px;
+}
+
+.ingredient-page-category,
+.ingredient-page-unit{
+    font-size: 16px;
+    color: var(--color-text);
+    margin: 5px 0;
+    text-align: center;
+    opacity: 0.9;
+}
+
+.ingredient-page-category span,
+.ingredient-page-unit span{
+    font-weight: 500;
+    color: var(--color-accent);
+}
+
+/* Dark mode adjustments to modal */
+@media (prefers-color-scheme: dark) {
+    .ingredient-page-backdrop {
+        background-color: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(6px) saturate(120%);
+    }
+
+    .ingredient-page-content{
+        background: var(--color-bg);
+        border-color: var(--color-border);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .close-ingredient-page-button:hover{
+        background-color: color-mix(in oklab, var(--color-accent) 20%, transparent);
+    }
+}
+
+/* Responsive sizing alignment */
+@media (min-width: 640px) {
+    .ingredient-page-content { max-width: 560px; }
+}
+
+@media (min-width: 1024px) {
+    .ingredient-page-content { max-width: 640px; }
+}
+
+/* Prevent scroll shift when modal opens */
+body.modal-open {
+    overflow: hidden;
+}
+
+.ingredient-page-quantity-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-top: 6px;
+    padding-top: 6px;
+    box-sizing: border-box;
+}
+
+/* Range input (modern browsers) */
+.ingredient-page-quantity-form #quantity{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    /* default percent — JS will overwrite this with setProperty('--pct', 'xx%') */
+    --pct: 50%;
+    /* background uses a CSS variable --pct set by JS; default is 50% */
+    background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent) var(--pct, 50%), var(--color-border) var(--pct, 50%), var(--color-border) 100%);
+    border-radius: 999px;
+    outline: none;
+    transition: box-shadow 120ms ease, background 120ms ease;
+    margin: 6px 0 0 0;
+}
+
+/* WebKit track and thumb */
+.ingredient-page-quantity-form #quantity::-webkit-slider-runnable-track{
+    /* make the pseudo track transparent so the input background shows through */
+    height: 10px;
+    background: transparent;
+    border-radius: 999px;
+}
+.ingredient-page-quantity-form #quantity::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    margin-top: -4px; /* center the thumb on the track */
+    background: var(--color-bg);
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    cursor: pointer;
+    transition: transform 120ms ease;
+}
+.ingredient-page-quantity-form #quantity::-webkit-slider-thumb:active{
+    transform: scale(0.98);
+}
+
+/* Firefox track and thumb */
+.ingredient-page-quantity-form #quantity::-moz-range-track{
+    /* hide default track so the input background gradient (with --pct) is visible */
+    height: 10px;
+    background: transparent;
+    border-radius: 999px;
+}
+.ingredient-page-quantity-form #quantity::-moz-range-thumb{
+    width: 18px;
+    height: 18px;
+    background: var(--color-bg);
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    cursor: pointer;
+}
+
+/* Firefox filled portion (progress) — keep transparent to allow input background to show */
+.ingredient-page-quantity-form #quantity::-moz-range-progress{
+    background: transparent;
+}
+
+/* Focus ring */
+.ingredient-page-quantity-form #quantity:focus{
+    box-shadow: 0 0 0 6px color-mix(in oklab, var(--color-accent) 12%, transparent);
+}
+
+/* Quantity display */
+.ingredient-page-quantity-form #quantity-value{
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-text);
+    background: transparent;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    min-width: 120px;
+    text-align: center;
+}
+
+/* Update button styling to match site */
+.ingredient-page-quantity-form .update-quantity-button{
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: linear-gradient(180deg, color-mix(in oklab, var(--color-accent) 92%, transparent), var(--color-accent));
+    color: var(--color-bg);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+    width: 100%;
+    max-width: 260px;
+}
+.ingredient-page-quantity-form .update-quantity-button:hover{
+    transform: translateY(-2px);
+    filter: brightness(1.03);
+}
+.ingredient-page-quantity-form .update-quantity-button:active{
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.10);
+}
+
+/* Responsive: keep controls compact on narrow screens */
+@media (max-width: 420px){
+    .ingredient-page-quantity-form #quantity-value{ min-width: 90px; font-size: 14px; }
+    .ingredient-page-quantity-form .update-quantity-button{ padding: 10px; max-width: 100%; }
+}
+
+.toast{
+    position: fixed;
+    top: 30px;
+    left: 10px;
+    z-index: 2000;
+    padding: 12px 16px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    color: #0f172a;
+    background: #e8f7ef;
+    border: 1px solid #b6e3c5;
+    font-weight: 600;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms ease, transform 300ms ease, visibility 300ms ease;
+    visibility: visible;
+}
+
+.toast.success-toast {
+    background: var(--toast-bg);
+    border-color: #b6e3c5;
+    color: var(--toast-text-color);
+}
+
+.toast.fade-out {
+    opacity: 0;
+    transform: translateY(-8px);
+    visibility: hidden;
+}

@@ -1,0 +1,57 @@
+.grocery-list-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.grocery-list{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 90%;
+}
+
+.grocery-item-card{
+    background-color: var(--color-neutral);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease
+}
+
+.grocery-item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.download-grocery-list-button{
+    padding: 10px 20px;
+    background-color: var(--color-accent);
+    width: 95%;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, filter 0.3s ease, transform 0.2s ease;
+}
+.download-grocery-list-button:hover{
+    background-color: #e67633;
+    transform: scale(101%);
+    filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0px 1px rgba(255,255,255,0.6));
+}
+.grocery-item-name{
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+.grocery-item-quantity{
+    font-size: 1rem;
+    color: var(--color-text);
+}
+

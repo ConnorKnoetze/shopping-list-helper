@@ -1,0 +1,97 @@
+ingredient,categories,unit,range_min,range_max,step
+Carrot,"Vegetable, Root Vegetable",kg,1,5,1
+Potato,"Vegetable, Root Vegetable, Starchy Vegetable",kg,1,5,1
+Tomato,"Vegetable, Fruit, Nightshade",pieces,2,10,1
+Onion,"Vegetable, Allium",pieces,2,8,1
+Garlic,"Vegetable, Allium, Spice",clove(s),1,10,1
+Spinach,"Vegetable, Leafy Green",kg,1,3,1
+Kale,"Vegetable, Leafy Green, Cruciferous",kg,1,3,1
+Lettuce,"Vegetable, Leafy Green, Salad",pieces,1,3,1
+Broccoli,"Vegetable, Cruciferous",pieces,1,5,1
+Cauliflower,"Vegetable, Cruciferous",pieces,1,3,1
+Zucchini,"Vegetable, Summer Squash",pieces,2,8,1
+Eggplant,"Vegetable, Nightshade",pieces,1,3,1
+Bell Pepper,"Vegetable, Nightshade, Pepper",pieces,2,8,1
+Cucumber,"Vegetable, Salad",pieces,2,8,1
+Mushrooms,"Vegetable, Fungi",kg,1,3,1
+Sweet Potato,"Vegetable, Root Vegetable, Starchy Vegetable",kg,1,5,1
+Pumpkin,"Vegetable, Winter Squash",kg,1,3,1
+Green Beans,"Vegetable, Legume",kg,1,3,1
+Asparagus,Vegetable,kg,1,3,1
+Cabbage,"Vegetable, Cruciferous",pieces,1,3,1
+Corn,"Vegetable, Grain, Starchy Vegetable",pieces,4,12,2
+Peas,"Vegetable, Legume",kg,1,3,1
+Apple,"Fruit, Pome Fruit",pieces,2,10,1
+Banana,"Fruit, Tropical",pieces,1,10,1
+Orange,"Fruit, Citrus",pieces,2,10,1
+Lemon,"Fruit, Citrus",pieces,2,10,1
+Lime,"Fruit, Citrus",pieces,2,8,1
+Strawberries,"Fruit, Berry",containers,1,5,1
+Blueberries,"Fruit, Berry",containers,1,5,1
+Grapes,"Fruit, Berry",bunches,1,5,1
+Pineapple,"Fruit, Tropical",pieces,1,3,1
+Mango,"Fruit, Tropical",pieces,2,8,1
+Peach,"Fruit, Stone Fruit",pieces,2,10,1
+Pear,"Fruit, Pome Fruit",pieces,2,10,1
+Watermelon,"Fruit, Melon",pieces,1,3,1
+Milk,"Dairy, Beverage",L,1,10,1
+Butter,"Dairy, Fat",g,100,500,100
+Cream,"Dairy, Fat",ml,250,1000,250
+Yogurt,"Dairy, Fermented",g,500,1500,250
+Cheddar Cheese,"Dairy, Cheese, Protein",g,100,500,100
+Mozzarella,"Dairy, Cheese, Protein",g,100,500,100
+Parmesan,"Dairy, Cheese, Protein",g,100,400,100
+Chicken Breast,"Meat, Poultry, Protein",kg,1,2,1
+Beef Mince,"Meat, Beef, Protein",kg,1,2,1
+Pork Chops,"Meat, Pork, Protein",kg,1,2,1
+Bacon,"Meat, Pork, Cured",kg,1,2,1
+Ham,"Meat, Pork, Cured",kg,1,2,1
+Sausage,"Meat, Processed",kg,1,2,1
+Ground Turkey,"Meat, Poultry, Protein",kg,1,2,1
+Salmon,"Seafood, Fish, Protein",kg,1,2,1
+Shrimp,"Seafood, Shellfish, Protein",kg,1,2,1
+Tuna,"Seafood, Fish, Protein",kg,1,2,1
+Rice,"Grain, Carbohydrate, Staple",kg,1,3,1
+Pasta,"Grain, Carbohydrate, Italian",kg,1,2,1
+Oats,"Grain, Breakfast, Whole Grain",kg,1,2,1
+Quinoa,"Grain, Protein, Gluten-Free",kg,1,2,1
+Bread,"Grain, Carbohydrate, Baked",kg,1,2,1
+Tortillas,"Grain, Carbohydrate, Mexican",kg,1,2,1
+Black Beans,"Legume, Protein, Fiber",kg,1,2,1
+Kidney Beans,"Legume, Protein, Fiber",kg,1,2,1
+Lentils,"Legume, Protein, Fiber",kg,1,2,1
+Chickpeas,"Legume, Protein, Fiber",kg,1,2,1
+Peanuts,"Legume, Nut, Protein",kg,1,2,1
+Flour,"Baking, Grain, Carbohydrate",kg,1,2,1
+Sugar,"Baking, Sweetener",kg,1,2,1
+Brown Sugar,"Baking, Sweetener",kg,1,2,1
+Baking Powder,"Baking, Leavening Agent",g,100,500,100
+Baking Soda,"Baking, Leavening Agent",g,100,500,100
+Yeast,"Baking, Leavening Agent, Fermentation",g,10,50,10
+Cocoa Powder,"Baking, Chocolate",g,100,500,100
+Chocolate Chips,"Baking, Chocolate, Sweetener",kg,1,2,1
+Vanilla Extract,"Baking, Flavoring",ml,100,500,100
+Olive Oil,"Oil & Condiment, Fat, Oil",L,1,2,1
+Sesame Oil,"Oil & Condiment, Fat, Oil, Asian",ml,250,1000,250
+Soy Sauce,"Oil & Condiment, Sauce, Asian",ml,250,1000,250
+Fish Sauce,"Oil & Condiment, Sauce, Asian",ml,100,500,100
+Ketchup,"Oil & Condiment, Sauce",ml,500,1000,250
+Mustard,"Oil & Condiment, Sauce",ml,250,1000,250
+Mayonnaise,"Oil & Condiment, Sauce, Fat",ml,250,1000,250
+Vinegar,"Oil & Condiment, Acid",ml,500,1000,250
+Honey,"Oil & Condiment, Sweetener, Natural",ml,500,1000,250
+Maple Syrup,"Oil & Condiment, Sweetener, Natural",ml,500,1000,250
+Salt,"Spice, Seasoning, Mineral",kg,1,2,1
+Pepper,"Spice, Seasoning",g,50,200,50
+Paprika,"Spice, Seasoning",g,50,200,50
+Cumin,"Spice, Seasoning",g,50,200,50
+Turmeric,"Spice, Seasoning, Anti-inflammatory",g,50,200,50
+Cinnamon,"Spice, Seasoning, Sweet",g,50,200,50
+Nutmeg,"Spice, Seasoning, Sweet",g,50,200,50
+Chili Powder,"Spice, Seasoning, Hot",g,50,200,50
+Chili Flakes,"Spice, Seasoning, Hot",g,50,200,50
+Oregano,"Herb, Seasoning",g,50,200,50
+Basil,"Herb, Seasoning",g,50,200,50
+Thyme,"Herb, Seasoning",g,50,200,50
+Rosemary,"Herb, Seasoning",g,50,200,50
+Herbs de Provence,"Herb, Seasoning, Blend",g,50,200,50
