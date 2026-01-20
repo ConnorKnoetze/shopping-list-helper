@@ -10,5 +10,53 @@
 {% block main %}
 <main class="home-content">
     {% include 'components/carousel.html' %}
+
+    <section class="ingredients-preview">
+        <h2 class="ingredients-title">Start Shopping</h2>
+        <div class="ingredients-grid">
+            {% for item in ingredients %}
+                <div class="inventory-card" id="{{ item.name }}">
+                    <img
+                        src="/static/images/placeholders/500x500.svg"
+                        alt="Grocery item"
+                        class="grid-item-image"
+                    />
+                    <h3 class="item-name">{{ item.name }}</h3>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" class="shopping-nav-button">Start Shopping List</button>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const shoppingNavButton = document.querySelector(".shopping-nav-button");
+                const ingredientsGrid = document.querySelector(".ingredients-grid");
+
+                const isTouchScreen = 'ontouchstart' in document.documentElement;
+
+                if (!isTouchScreen) {
+                    ingredientsGrid.addEventListener('mouseenter', () => {
+                        shoppingNavButton.classList.add("visible");
+                    });
+
+                    ingredientsGrid.addEventListener('mouseleave', () => {
+                        shoppingNavButton.classList.remove("visible");
+                    });
+
+                    shoppingNavButton.addEventListener("click", () => {
+                        window.location.href = "{{ url_for('inventory_bp.inventory') }}";
+                    });
+
+                    shoppingNavButton.addEventListener('mouseenter', () => {
+                        shoppingNavButton.classList.add("visible");
+                    });
+                } else {
+                    shoppingNavButton.classList.add("visible");
+                    shoppingNavButton.addEventListener("click", () => {
+                        window.location.href = "{{ url_for('inventory_bp.inventory') }}";
+                    });
+                }
+            });
+        </script>
+    </section>
 </main>
 {% endblock %}
