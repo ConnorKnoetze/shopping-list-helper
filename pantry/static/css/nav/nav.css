@@ -19,6 +19,7 @@
     backdrop-filter: blur(1px);
     transition: height 0.3s ease-in-out;
     overflow: hidden;
+    border-radius: 0 0 15px 15px;
 }
 
 .nav-content.opened.hidden {
@@ -53,6 +54,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 15px;
 }
 
 .nav-content.closed.hidden {

@@ -210,10 +210,22 @@
     box-shadow: none;
 }
 
-.reset-button svg{
+.reset-button svg {
     width: 16px;
     height: 16px;
     stroke: currentColor;
+    display: inline-block;          /* ensure transforms apply consistently */
+    transform-origin: center;       /* rotate around center */
+    transition: transform 300ms ease; /* animate the rotation */
+    will-change: transform;
+    padding: 5px;
+}
+
+.reset-button:hover svg {
+    transform: rotate(90deg);
+    background-color: color-mix(in oklab, var(--color-accent) 15%, transparent);
+    padding: 5px;
+    border-radius: 50%;
 }
 
 /* Custom dropdown arrow styling */

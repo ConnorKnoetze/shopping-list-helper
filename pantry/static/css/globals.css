@@ -53,13 +53,13 @@ body {
     font-family: "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, system-ui, -apple-system, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
 }
 
-@media (min-width: 1921px) {
+@media (min-width: 1700px) {
     body{
         position: relative;
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
-        max-width: 1920px;
+        max-width: 1700px;
         box-sizing: border-box;
         background: var(--gradient-primary);
         backdrop-filter: blur(10px) saturate(150%);
