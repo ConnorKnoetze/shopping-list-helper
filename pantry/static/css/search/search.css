@@ -88,12 +88,6 @@
     border-color: var(--color-border);
 }
 
-.search-filter:focus {
-    border-color: var(--color-primary);
-    background-color: var(--color-bg);
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 20%, transparent);
-}
-
 @media (max-width: 480px) {
     .search-filter {
         min-width: 100px;

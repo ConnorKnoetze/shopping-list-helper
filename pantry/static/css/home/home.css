@@ -6,8 +6,9 @@
     --hider-color: rgba(255, 255, 255, 1);
     --gap: 15px;
     --row-h: 220px; /* used for max-height math only */
-}
 
+    --translucent-gradient: linear-gradient(135deg, rgba(232, 236, 233, 0.6) 0%, rgba(152, 226, 198, 0.6) 25%, rgba(212, 231, 196, 0.6) 50%, rgba(152, 226, 198, 0.6) 75%, #E8ECE9 100%);
+}
 /* dark mode fallbacks */
 @media (prefers-color-scheme: dark) {
     :root {
@@ -15,6 +16,8 @@
         --inventory-card-bg: rgba(20,20,20,0.9);
         --color-border: rgba(255,255,255,0.06);
         --hider-color: rgba(0, 0, 0, 1);
+
+        --translucent-gradient: linear-gradient(135deg, rgba(18, 22, 19, 0.85) 0%, rgba(31, 38, 32, 0.85) 25%, rgba(47, 79, 62, 0.85) 50%, rgba(31, 38, 32, 0.85) 75%, #0A0D0B 100%);
     }
 }
 
@@ -22,7 +25,157 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+}
+
+.hero-carousel {
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    position: relative;
+}
+
+.hero-section {
+    position: absolute;
+    display: flex;
+    flex-direction: column;;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 50%;
+    z-index: 3;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.hero-section:hover{
+    transform: translate(0, -0.5%);
+}
+
+.button-section {
+    position: absolute;
+    display: flex;
+    flex-direction: column;;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    z-index: 4;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.view-recipes-button {
+    padding: 15px 30px;
+    background-color: var(--color-accent);
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    font-size: 24px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: background-color 300ms ease, filter 300ms ease, transform 300ms ease;
+    z-index: 10;
+    will-change: transform, opacity;
+    animation: bob 900ms ease-in-out infinite alternate;
+}
+
+@keyframes bob {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-3px); }
+}
+
+.view-recipes-button:hover{
+    background-color: #e67634;
+    filter: drop-shadow(rgba(0,0,0, 0.3) 0 10px 10px);
+    transform: translateY(-5%);
+    animation-play-state: paused;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    height: 90%;
+    background: var(--translucent-gradient);
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+}
+
+.hero-text-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 80%;
+    width: 80%;
+    background: var(--ingredients-bg);
+    border: 2px double var(--color-border);
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.hero-title-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-title{
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    z-index: 2;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+    cursor: pointer;
+    margin: 0;
+    text-wrap: nowrap;
+}
+
+.hero-title.highlight{
+    color: var(--color-accent); !important;
+}
+
+@media (max-width: 550px) {
+    .hero-carousel{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hero-section {
+        position: inherit;
+        width: 100%;
+        height: 110%;
+    }
+
+    .title-container {
+        width: 100%;
+        height: 200px;
+        padding: 20px 0;
+    }
+}
+
+@media (max-width: 800px) {
+    .hero-section {
+        width: 100%;
+    }
+}
+
+@media (max-width: 1700px){
+    .home-content{
+        gap: 25px;
+    }
 }
 
 /* container */
@@ -88,6 +241,7 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     -webkit-user-select: none;
     -webkit-user-drag: none;
+    text-align: center;
 }
 
 .inventory-card img,
