@@ -3,9 +3,11 @@ from typing import List
 
 repo_instance = None
 
+
 class RepositoryException(Exception):
     def __init__(self, message=None):
         pass
+
 
 class AbstractRepository(abc.ABC):
     @abc.abstractmethod
@@ -36,6 +38,7 @@ class AbstractRepository(abc.ABC):
     @abc.abstractmethod
     def sort_ingredients_by_name(self, name: str):
         raise NotImplementedError
+
     @abc.abstractmethod
     def sort_ingredients_by_category(self, category: str):
         raise NotImplementedError
@@ -54,18 +57,22 @@ class AbstractRepository(abc.ABC):
     def get_category_by_name(self, name: str):
         # Retrieves a Category by its name.
         raise NotImplementedError
+
     @abc.abstractmethod
     def get_all_categories(self) -> List:
         # Retrieves all Categories.
         raise NotImplementedError
+
     @abc.abstractmethod
     def add_user(self, user):
         # Adds a User to the repository.
         raise NotImplementedError
+
     @abc.abstractmethod
     def get_user_by_username(self, username: str):
         # Retrieves a User by their username.
         raise NotImplementedError
+
     @abc.abstractmethod
     def get_all_users(self) -> List:
         # Retrieves all Users.
@@ -90,3 +97,30 @@ class AbstractRepository(abc.ABC):
     def update_user(self, user):
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def add_recipe(self, recipe):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def add_multiple_recipes(self, recipes: List):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_recipe_by_name(self, name: str):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_recipes_by_category(self, category: str) -> List:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_all_recipes(self) -> List:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def sort_recipes_by_name(self, name: str):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def sort_recipes_by_category(self, category: str):
+        raise NotImplementedError

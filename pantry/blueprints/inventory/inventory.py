@@ -5,6 +5,7 @@ from pantry.blueprints.authentication.authentication import login_required
 
 inventory_bp = Blueprint("inventory_bp", __name__)
 
+
 @inventory_bp.route("/inventory", methods=["GET", "POST"])
 @login_required
 def inventory():
@@ -31,34 +32,44 @@ def inventory():
         "pages/inventory/inventory.html",
         inventory_items=inventory_items,
         search_param=param,
-        search_criteria=criteria
+        search_criteria=criteria,
     )
+
 
 @inventory_bp.route("/inventory/api/<string:name>")
 @login_required
 def inventory_api(name: str):
     from flask import jsonify
+
     repo = repository.repo_instance
     ingredient = repo.get_ingredient_by_name(name)
     if ingredient:
         categories_str = ""
         if ingredient.categories:
             if isinstance(ingredient.categories, list):
-                categories_str = ";".join([cat.name if hasattr(cat, 'name') else str(cat) for cat in ingredient.categories])
+                categories_str = ";".join(
+                    [
+                        cat.name if hasattr(cat, "name") else str(cat)
+                        for cat in ingredient.categories
+                    ]
+                )
             else:
                 categories_str = str(ingredient.categories)
 
-        return jsonify({
-            "name": ingredient.name,
-            "categories": categories_str,
-            "unit": ingredient.unit,
-            "quantity": ingredient.quantity,
-            "range_min": ingredient.range_min,
-            "range_max": ingredient.range_max,
-            "step": ingredient.step,
-        }), 200
+        return jsonify(
+            {
+                "name": ingredient.name,
+                "categories": categories_str,
+                "unit": ingredient.unit,
+                "quantity": ingredient.quantity,
+                "range_min": ingredient.range_min,
+                "range_max": ingredient.range_max,
+                "step": ingredient.step,
+            }
+        ), 200
     else:
         return jsonify({"error": "Ingredient not found"}), 404
+
 
 @inventory_bp.route("/inventory/update/<string:name>", methods=["POST"])
 @login_required
@@ -101,28 +112,25 @@ def update_inventory(name: str):
         user.add_grocery(ingredient, quantity)
         repo.update_user(user)
 
-        return jsonify({
-            "success": True,
-            "message": f"Successfully added {quantity} {unit} of {name}",
-            "item": {
-                "name": name,
-                "quantity": quantity,
-                "unit": unit
+        return jsonify(
+            {
+                "success": True,
+                "message": f"Successfully added {quantity} {unit} of {name}",
+                "item": {"name": name, "quantity": quantity, "unit": unit},
             }
-        }), 200
+        ), 200
 
     except json.JSONDecodeError as e:
         print(f"JSONDecodeError: {str(e)}")
-        return jsonify({
-            "success": False,
-            "message": f"Invalid JSON format: {str(e)}"
-        }), 400
+        return jsonify(
+            {"success": False, "message": f"Invalid JSON format: {str(e)}"}
+        ), 400
 
     except Exception as e:
         print(f"Exception: {str(e)}")
         import traceback
+
         traceback.print_exc()
-        return jsonify({
-            "success": False,
-            "message": f"Error updating quantity: {str(e)}"
-        }), 400
+        return jsonify(
+            {"success": False, "message": f"Error updating quantity: {str(e)}"}
+        ), 400

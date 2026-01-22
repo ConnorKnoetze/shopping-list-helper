@@ -1,1 +1,28 @@
 {% extends 'pages/authenticated.html' %}
+
+{% block title %}Recipes - Pantry{% endblock %}
+
+{% block extra_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recipes/recipes.css') }}">
+    <script defer src="{{ url_for('static', filename='js/recipes/recipes.js') }}"></script>
+{% endblock %}
+
+{% block main %}
+    <div class="recipes-page-container">
+        <h1>Recipes</h1>
+        <div class="recipes-grid">
+            {% for recipe in recipes %}
+                <div class="recipe-card" data-recipe-name="{{ recipe.name }}">
+                    <div class="recipe-text">
+                        <h2 class="recipe-name">{{ recipe.name }}</h2>
+                        <p class="recipe-description">{{ recipe.description }}</p>
+                    </div>
+                    <img class="recipe-image" src="static/images/recipes/{{ recipe.image_url }}" alt="recipe-image">
+                </div>
+            {% else %}
+                <p>No recipes found.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

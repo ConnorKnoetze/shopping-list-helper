@@ -19,16 +19,15 @@ def login():
     username_not_recognized = None
     password_does_not_match = None
 
-
     if form.validate_on_submit():
         try:
             user = services.get_user(form.username.data, repo)
 
-            services.authenticate_user(user['username'], form.password.data, repo)
+            services.authenticate_user(user["username"], form.password.data, repo)
 
             session.clear()
 
-            session['username'] = user['username']
+            session["username"] = user["username"]
             return redirect(url_for("home_bp.home"))
 
         except services.UnknownUserException:
@@ -36,7 +35,6 @@ def login():
 
         except services.AuthenticationException:
             password_does_not_match = "Password does not match"
-
 
     return render_template(
         "pages/auth/login.html",
@@ -47,13 +45,16 @@ def login():
         handler_url=url_for("authentication_bp.login"),
     )
 
+
 @authentication_blueprint.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("home_bp.home"))
 
+
 def login_required(view):
     from functools import wraps
+
     @wraps(view)
     def wrapped_view(**kwargs):
         if not is_logged_in():
@@ -61,6 +62,7 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
 
 @authentication_blueprint.route("/register", methods=["GET", "POST"])
 def register():
@@ -82,10 +84,17 @@ def register():
         else:
             password_hash = generate_password_hash(form.password.data)
             try:
-                services.add_user(form.username.data, form.email.data, password_hash, repository.repo_instance)
+                services.add_user(
+                    form.username.data,
+                    form.email.data,
+                    password_hash,
+                    repository.repo_instance,
+                )
                 return redirect(url_for("authentication_bp.login"))
             except services.NameNotUniqueException:
-                username_error_message = "Username already exists - please choose another"
+                username_error_message = (
+                    "Username already exists - please choose another"
+                )
 
             except services.EmailNotUniqueException:
                 email_error_message = "Email already registered - please use another"
@@ -97,6 +106,7 @@ def register():
         email_error_message=email_error_message,
         handler_url=url_for("authentication_bp.register"),
     )
+
 
 class PasswordValid:
     def __init__(self, message=None):
@@ -112,6 +122,7 @@ class PasswordValid:
         schema.min(8).has().uppercase().has().lowercase().has().digits()
         if not schema.validate(field.data):
             raise ValidationError(self.message)
+
 
 class RegistrationForm(FlaskForm):
     username = StringField(
@@ -132,6 +143,7 @@ class RegistrationForm(FlaskForm):
         "Password", [DataRequired(message="Your password is required"), PasswordValid()]
     )
     submit = SubmitField("Register")
+
 
 class LoginForm(FlaskForm):
     username = StringField("Username", [DataRequired()])
