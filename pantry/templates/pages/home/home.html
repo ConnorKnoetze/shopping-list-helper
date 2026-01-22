@@ -5,11 +5,28 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home/home.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/carousel/carousel.css')}}">
     <script defer src="{{ url_for('static', filename='js/carousel/carousel.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='js/home/home.js') }}"></script>
 {% endblock %}
 
 {% block main %}
 <main class="home-content">
-    {% include 'components/carousel.html' %}
+    <div class="hero-carousel">
+        <div class="hero-section">
+            <div class="title-container">
+                <div class="hero-text-container">
+                    <div class="hero-title-container">
+                        <h1 class="hero-title">Welcome to </h1>
+                        <p class="hero-title highlight"> PantryPal</p>
+                    </div>
+                    <p class="hero-subtitle">Your personal pantry management solution</p>
+                </div>
+            </div>
+        </div>
+        {% include 'components/carousel.html' %}
+        <div class="button-section">
+            <button class="view-recipes-button" type="button">View Recipes</button>
+        </div>
+    </div>
 
     <section class="ingredients-preview">
         <h2 class="ingredients-title">Start Shopping</h2>
@@ -23,40 +40,11 @@
                     />
                     <h3 class="item-name">{{ item.name }}</h3>
                 </div>
+                {% else %}
+                    <p class="no-items-message">No ingredients available.</p>
             {% endfor %}
         </div>
         <button type="button" class="shopping-nav-button">Start Shopping List</button>
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const shoppingNavButton = document.querySelector(".shopping-nav-button");
-                const ingredientsGrid = document.querySelector(".ingredients-grid");
-
-                const isTouchScreen = 'ontouchstart' in document.documentElement;
-
-                if (!isTouchScreen) {
-                    ingredientsGrid.addEventListener('mouseenter', () => {
-                        shoppingNavButton.classList.add("visible");
-                    });
-
-                    ingredientsGrid.addEventListener('mouseleave', () => {
-                        shoppingNavButton.classList.remove("visible");
-                    });
-
-                    shoppingNavButton.addEventListener("click", () => {
-                        window.location.href = "{{ url_for('inventory_bp.inventory') }}";
-                    });
-
-                    shoppingNavButton.addEventListener('mouseenter', () => {
-                        shoppingNavButton.classList.add("visible");
-                    });
-                } else {
-                    shoppingNavButton.classList.add("visible");
-                    shoppingNavButton.addEventListener("click", () => {
-                        window.location.href = "{{ url_for('inventory_bp.inventory') }}";
-                    });
-                }
-            });
-        </script>
     </section>
 </main>
 {% endblock %}

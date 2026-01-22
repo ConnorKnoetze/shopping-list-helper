@@ -6,8 +6,10 @@ from pantry.adapters.repository import AbstractRepository
 class NameNotUniqueException(Exception):
     pass
 
+
 class EmailNotUniqueException(Exception):
     pass
+
 
 class UnknownUserException(Exception):
     pass
@@ -41,6 +43,7 @@ def add_user(username: str, email: str, password_hash: str, repo: AbstractReposi
 
     return new_user
 
+
 def get_user(username: str, repo: AbstractRepository):
     user = repo.get_user_by_username(username)
 
@@ -51,6 +54,7 @@ def get_user(username: str, repo: AbstractRepository):
         raise UnknownUserException
     return user_to_dict(user)
 
+
 def authenticate_user(username: str, password_hash: str, repo: AbstractRepository):
     authenticated = False
     user = repo.get_user_by_username(username)
@@ -58,6 +62,7 @@ def authenticate_user(username: str, password_hash: str, repo: AbstractRepositor
     authenticated = check_password_hash(user.password_hash, password_hash)
     if not authenticated:
         raise AuthenticationException
+
 
 def user_to_dict(user) -> dict:
     user_dict = {
