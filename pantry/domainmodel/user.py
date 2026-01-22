@@ -4,7 +4,9 @@ from pantry.domainmodel.ingredient import Ingredient
 
 
 class User:
-    def __init__(self, user_id: int, username: str, email: str, password_hash: str = None):
+    def __init__(
+        self, user_id: int, username: str, email: str, password_hash: str = None
+    ):
         self.__user_id = user_id
         self.__username = username
         self.__email = email

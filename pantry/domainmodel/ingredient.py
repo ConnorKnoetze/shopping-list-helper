@@ -1,5 +1,14 @@
 class Ingredient:
-    def __init__(self, name: str, quantity: float, unit: str, categories=None, range_min=1, range_max=100, step=1):
+    def __init__(
+        self,
+        name: str,
+        quantity: float,
+        unit: str,
+        categories=None,
+        range_min=1,
+        range_max=100,
+        step=1,
+    ):
         self.__name = name
         self.__quantity = quantity
         self.__unit = unit
@@ -13,10 +22,12 @@ class Ingredient:
 
     def __eq__(self, other):
         if isinstance(other, Ingredient):
-            return (self.name == other.name and
-                    self.quantity == other.quantity and
-                    self.unit == other.unit and
-                    self.categories == other.categories)
+            return (
+                self.name == other.name
+                and self.quantity == other.quantity
+                and self.unit == other.unit
+                and self.categories == other.categories
+            )
         return False
 
     def __lt__(self, other):

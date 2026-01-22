@@ -1,14 +1,26 @@
 from pantry.adapters.repository import AbstractRepository, RepositoryException
 from typing import List
+
+from pantry.domainmodel import recipe
 from pantry.domainmodel.ingredient import Ingredient
 from pantry.domainmodel.category import Category
 from pantry.domainmodel.user import User
+from pantry.domainmodel.recipe import Recipe
+
 
 class MemoryRepository(AbstractRepository):
     def __init__(self):
         self.__ingredients: List[Ingredient] = []
         self.__categories: List[Category] = []
-        self.__users: List[User] = [User(user_id=1, username='CNK', email='connorknoetze@gmail.com', password_hash='scrypt:32768:8:1$8B3wBNdfVYip2e7v$7e6807f0c31ca8718ee1b4ed9d0e22ce715a52c15bc5eb273c9e7d6d87169aa9436c0802fccd061192557281aa258a18e1dac4bd44814e6ba8e7852aeccae19d')]
+        self.__users: List[User] = [
+            User(
+                user_id=1,
+                username="CNK",
+                email="connorknoetze@gmail.com",
+                password_hash="scrypt:32768:8:1$8B3wBNdfVYip2e7v$7e6807f0c31ca8718ee1b4ed9d0e22ce715a52c15bc5eb273c9e7d6d87169aa9436c0802fccd061192557281aa258a18e1dac4bd44814e6ba8e7852aeccae19d",
+            )
+        ]
+        self.__recipes: List[recipe] = []
 
     def add_ingredient(self, ingredient: Ingredient):
         self.__ingredients.append(ingredient)
@@ -64,10 +76,10 @@ class MemoryRepository(AbstractRepository):
     def get_total_user_size(self):
         return len(self.__users)
 
-    def create_user(self, username:str, email:str, password_hash:str) -> User:
-        return User(self.get_total_user_size() + 1 ,username, email, password_hash)
+    def create_user(self, username: str, email: str, password_hash: str) -> User:
+        return User(self.get_total_user_size() + 1, username, email, password_hash)
 
-    def get_user_by_email(self, email_clean:str) -> User:
+    def get_user_by_email(self, email_clean: str) -> User:
         return next((u for u in self.__users if u.email == email_clean), None)
 
     def update_user(self, user: User):
@@ -76,3 +88,33 @@ class MemoryRepository(AbstractRepository):
                 self.__users[idx] = user
                 return
         raise RepositoryException(f"User with id {user.id} not found.")
+
+    def add_recipe(self, recipe: recipe):
+        self.__recipes.append(recipe)
+
+    def add_multiple_recipes(self, recipes: List[recipe]):
+        self.__recipes.extend(recipes)
+
+    def get_recipe_by_name(self, name: str) -> recipe:
+        return next((rec for rec in self.__recipes if rec.name == name), None)
+
+    def get_recipes_by_category(self, category: str) -> List:
+        return [rec for rec in self.__recipes if rec.category == category]
+
+    def get_all_recipes(self) -> List[recipe]:
+        return sorted(self.__recipes)
+
+    def sort_recipes_by_name(self, name: str):
+        items = []
+        for rec in self.__recipes:
+            if name.lower() in rec.name.lower():
+                items.append(rec)
+        return sorted(items, key=lambda rec: rec.name)
+
+    def sort_recipes_by_category(self, category: str):
+        items = []
+        for rec in self.__recipes:
+            if category.lower() in rec.category.lower():
+                items.append(rec)
+        return sorted(items, key=lambda rec: rec.name)
+

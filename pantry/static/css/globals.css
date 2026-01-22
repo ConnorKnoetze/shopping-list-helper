@@ -4,8 +4,8 @@
     --color-border: rgba(0, 0, 0, 0.12);
 
     /* Primary */
-    --color-primary: #98E2C6;
-    --color-primary-transparent: rgba(255, 255, 255, 0.3);
+    --color-primary: rgb(152, 226, 198);
+    --color-primary-transparent: rgba(152, 226, 198, 0.3);
     /* Secondary */
     --color-secondary: #D4E7C4;
     /* Accent */
@@ -28,7 +28,8 @@
         --color-bg: #121613;
         --color-text: #E8ECE9;
         --color-border: rgba(255, 255, 255, 0.12);
-        --color-primary: #2F4F3E;
+        --color-primary: rgb(47, 79, 62);
+        --color-primary-transparent: rgba(47, 79, 62, 0.3);
         --color-secondary: #283825;
         --color-accent: #FF8B3D;
         --color-neutral: #373737;
@@ -56,9 +57,6 @@ body {
 
 @media (min-width: 1700px) {
     body{
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
         width: 100%;
         max-width: 1700px;
         box-sizing: border-box;
@@ -66,5 +64,6 @@ body {
         backdrop-filter: blur(10px) saturate(150%);
         padding : 0 20px;
         border-radius: 15px;
+        margin: 0 auto;
     }
 }
