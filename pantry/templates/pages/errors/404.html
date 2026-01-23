@@ -1,0 +1,18 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}404 Not Found - Pantry{% endblock %}
+
+{% block extra_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/errors/404.css') }}">
+{% endblock %}
+
+{% block body %}
+<main class="error-404-content">
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">Oops! The page you're looking for cannot be found.</p>
+        <a href="{{ url_for('home_bp.home') }}" class="home-link">Return to Home</a>
+    </div>
+</main>
+{% endblock %}
