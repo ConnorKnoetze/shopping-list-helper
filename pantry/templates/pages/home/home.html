@@ -33,11 +33,6 @@
         <div class="ingredients-grid">
             {% for item in ingredients %}
                 <div class="inventory-card" id="{{ item.name }}">
-                    <img
-                        src="/static/images/placeholders/500x500.svg"
-                        alt="Grocery item"
-                        class="grid-item-image"
-                    />
                     <h3 class="item-name">{{ item.name }}</h3>
                 </div>
                 {% else %}

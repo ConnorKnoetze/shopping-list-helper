@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         </svg>
                     </button>
                     <div class="ingredient-page-inner-content">
-                        <img src="/static/images/placeholders/500x500.svg" alt="${data.name}" class="ingredient-page-image"/>
                         <h2 class="ingredient-page-name">${data.name}</h2>
                         <p class="ingredient-page-category">Categories: <span>${data.categories || 'N/A'}</span></p>
                         <form class="ingredient-page-quantity-form" method="POST" action="/inventory/update/${data.name}">

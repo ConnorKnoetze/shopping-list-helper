@@ -10,15 +10,11 @@
 
 {% block main %}
     <main class="page-panel">
+    <button class="sidebar-toggle-button hidden" aria-label="Toggle recipe sidebar"></button>
     <div class="recipe-detail-container">
         <!-- Right: sidebar with ingredients (sticky) -->
         <aside class="recipe-sidebar">
             <h2>Ingredients</h2>
-
-            <div class="sidebar-actions">
-                <button class="btn btn-primary">Add all to shopping</button>
-                <button class="btn btn-muted">Scale</button>
-            </div>
 
             <ul class="ingredients-list">
                 {% for ingredient in recipe.ingredients %}
@@ -31,6 +27,10 @@
                     </li>
                 {% endfor %}
             </ul>
+
+            <div class="sidebar-actions">
+                <button class="btn btn-primary">Add selected to shopping</button>
+            </div>
         </aside>
 
         <!-- Left: main content (title, image, description, instructions, meta) -->
@@ -71,12 +71,12 @@
             <div class="recipe-info">
                 <div class="section-card description-card">
                     <h2>Description</h2>
-                    <p class="recipe-description">{{ recipe.description }}</p>
+                    <p class="recipe-description text-container">{{ recipe.description }}</p>
                 </div>
 
                 <div class="section-card">
                     <h2>Instructions</h2>
-                    <ol class="instructions-list">
+                    <ol class="instructions-list text-container">
                         {% for step in recipe.methods %}
                             <li>{{ step }}</li>
                         {% endfor %}
@@ -86,7 +86,7 @@
                 <div class="section-card time-notes-container">
                     <div class="time-card">
                         <h2>Time Taken</h2>
-                        <ul class="time-list">
+                        <ul class="time-list text-container">
                             {% if recipe.prep_time_mins %}
                                 <li>Preparation Time: {{ recipe.prep_time_mins }} minutes</li>
                             {% else %}
@@ -107,7 +107,7 @@
 
                     <div class="notes-card">
                         <h2>Notes</h2>
-                        <p class="recipe-notes">{{ recipe.notes }}</p>
+                        <p class="recipe-notes text-container">{{ recipe.notes }}</p>
                     </div>
                 </div>
 
