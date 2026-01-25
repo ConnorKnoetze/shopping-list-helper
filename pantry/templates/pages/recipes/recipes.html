@@ -10,7 +10,7 @@
 
 {% block main %}
     <div class="recipes-page-container">
-        <h1>Recipes</h1>
+        <h2>Pick out your recipe</h2>
         <div class="recipes-grid">
             {% for recipe in recipes %}
                 <div class="recipe-card" data-recipe-name="{{ recipe.name }}">
@@ -18,7 +18,10 @@
                         <h2 class="recipe-name">{{ recipe.name }}</h2>
                         <p class="recipe-description">{{ recipe.description }}</p>
                     </div>
-                    <img class="recipe-image" src="static/images/recipes/{{ recipe.image_url }}" alt="recipe-image">
+                    <div class="image-container">
+                        <img class="recipe-image" src="static/images/recipes/{{ recipe.image_url }}" alt="recipe-image">
+                        <button class="view-recipes-button">View Recipe</button>
+                    </div>
                 </div>
             {% else %}
                 <p>No recipes found.</p>

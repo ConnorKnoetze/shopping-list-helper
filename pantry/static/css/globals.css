@@ -20,6 +20,10 @@
     --gradient-bg: var(--gradient-primary);
 
     color: var(--color-text);
+
+    --recipe-card-bg: rgba(255, 255, 255, 0.8);
+    --toast-bg: #e8f7ef;
+    --toast-text-color: #0f172a;
 }
 
 /* Dark Mode */
@@ -37,6 +41,9 @@
         --gradient-secondary: linear-gradient(120deg, #121613 0%, #283825 40%, #2F4F3E 70%, #FF8B3D 100%);
         --gradient-bg: var(--gradient-primary);
         color: var(--color-text);
+        --recipe-card-bg: rgba(0, 0, 0, 0.4);
+        --toast-bg: #2f4f3e;
+        --toast-text-color: #e8ece9;
     }
 }
 

@@ -96,7 +96,7 @@ class MemoryRepository(AbstractRepository):
         self.__recipes.extend(recipes)
 
     def get_recipe_by_name(self, name: str) -> recipe:
-        return next((rec for rec in self.__recipes if rec.name == name), None)
+        return next((rec for rec in self.__recipes if rec.name.lower() == name.lower()), None)
 
     def get_recipes_by_category(self, category: str) -> List:
         return [rec for rec in self.__recipes if rec.category == category]
@@ -117,4 +117,3 @@ class MemoryRepository(AbstractRepository):
             if category.lower() in rec.category.lower():
                 items.append(rec)
         return sorted(items, key=lambda rec: rec.name)
-

@@ -1,0 +1,118 @@
+{% extends 'pages/authenticated.html' %}
+
+{% block title %}{{ recipe.name }} - Recipe Details{% endblock %}
+
+{% block extra_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recipes/recipe-detail.css') }}">
+    <script defer src="{{ url_for('static', filename='js/recipes/recipe-detail.js') }}"></script>
+{% endblock %}
+
+{% block main %}
+    <main class="page-panel">
+    <button class="sidebar-toggle-button hidden" aria-label="Toggle recipe sidebar"></button>
+    <div class="recipe-detail-container">
+        <!-- Right: sidebar with ingredients (sticky) -->
+        <aside class="recipe-sidebar">
+            <h2>Ingredients</h2>
+
+            <ul class="ingredients-list">
+                {% for ingredient in recipe.ingredients %}
+                    <li>
+                        <label class="ingredient-row">
+                            <input type="checkbox" class="ingredient-check" aria-hidden="true" />
+                            <span class="ingredient-name">{{ ingredient[0] }}</span>
+                        </label>
+                        <span class="ingredient-qty">{{ ingredient[1] }} {{ ingredient[2] }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="sidebar-actions">
+                <button class="btn btn-primary">Add selected to shopping</button>
+            </div>
+        </aside>
+
+        <!-- Left: main content (title, image, description, instructions, meta) -->
+        <div class="recipe-main">
+            <button class="back-button" type="button" aria-label="Go back to Recipes List">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+            </button>
+
+            <h1 class="recipe-title">{{ recipe.name }}</h1>
+
+            <div class="image-and-meta">
+                <div class="meta-chips">
+                    <span class="chip desc"><span class="muted">Category:</span>&nbsp;{{ recipe.category }}</span>
+                    <span class="chip desc"><span class="muted">Cuisine:</span>&nbsp;{{ recipe.cuisine }}</span>
+                    <span class="chip desc difficulty;{{ recipe.difficulty }}"><span class="muted">Difficulty: </span> {{ recipe.difficulty }}</span>
+                </div>
+                <div class="meta-chips">
+                    {% if recipe.tags %}
+                        {% for tag in recipe.tags %}
+                            <span class="chip">{{ tag }}</span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+
+                <div class="recipe-image-container">
+                    <img class="recipe-image" src="{{ url_for('static', filename='images/recipes/' + recipe.image_url) }}" alt="Image of {{ recipe.name }}">
+                </div>
+
+                <div class="button-container">
+                    <button class="save-recipe-button recipe-button" type="button" aria-label="Save Recipe to Active Recipes List">Save Recipe</button>
+                </div>
+            </div>
+
+            <div class="recipe-info">
+                <div class="section-card description-card">
+                    <h2>Description</h2>
+                    <p class="recipe-description text-container">{{ recipe.description }}</p>
+                </div>
+
+                <div class="section-card">
+                    <h2>Instructions</h2>
+                    <ol class="instructions-list text-container">
+                        {% for step in recipe.methods %}
+                            <li>{{ step }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+
+                <div class="section-card time-notes-container">
+                    <div class="time-card">
+                        <h2>Time Taken</h2>
+                        <ul class="time-list text-container">
+                            {% if recipe.prep_time_mins %}
+                                <li>Preparation Time: {{ recipe.prep_time_mins }} minutes</li>
+                            {% else %}
+                                <li>Preparation Time: N/A</li>
+                            {% endif %}
+                            {% if recipe.cook_time_mins %}
+                                <li>Cooking Time: {{ recipe.cook_time_mins }} minutes</li>
+                            {% else %}
+                                <li>Cooking Time: N/A</li>
+                            {% endif %}
+                            {% if recipe.total_time_mins %}
+                                <li>Total Time: {{ recipe.total_time_mins }} minutes</li>
+                            {% else %}
+                                <li>Total Time: N/A</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                    <div class="notes-card">
+                        <h2>Notes</h2>
+                        <p class="recipe-notes text-container">{{ recipe.notes }}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </main>
+{% endblock %}
