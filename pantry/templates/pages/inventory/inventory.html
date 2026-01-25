@@ -15,12 +15,7 @@
         <div class="inventory-grid">
             {% for item in inventory_items %}
                 <div class="inventory-card" id="{{ item.name }}">
-                    <img
-                        src="/static/images/placeholders/500x500.svg"
-                        alt="Grocery item"
-                        class="grid-item-image"
-                    />
-                    <h3 class="item-name">{{ item.name }}</h3>
+                    <h1 class="item-name">{{ item.name }}</h1>
                 </div>
             {% else %}
                 <p class="no-items-message">No items in inventory.</p>

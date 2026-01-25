@@ -1,4 +1,5 @@
-from typing import List
+import string
+from typing import List, Tuple
 
 from pantry.domainmodel.ingredient import Ingredient
 
@@ -9,7 +10,7 @@ class Recipe:
         id: int,
         name: str,
         description: str,
-        ingredients: List[Ingredient],
+        ingredients: List[Tuple[any]],
         methods: List[str],
         prep_time_mins: int,
         cook_time_mins: int,
@@ -63,6 +64,7 @@ class Recipe:
     @property
     def description(self) -> str:
         return self.__description
+
     @property
     def ingredients(self) -> List[Ingredient]:
         return self.__ingredients
