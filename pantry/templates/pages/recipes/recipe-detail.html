@@ -16,21 +16,31 @@
         <aside class="recipe-sidebar">
             <h2>Ingredients</h2>
 
-            <ul class="ingredients-list">
-                {% for ingredient in recipe.ingredients %}
-                    <li>
-                        <label class="ingredient-row">
-                            <input type="checkbox" class="ingredient-check" aria-hidden="true" />
-                            <span class="ingredient-name">{{ ingredient[0] }}</span>
-                        </label>
-                        <span class="ingredient-qty">{{ ingredient[1] }} {{ ingredient[2] }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
+            <form id="ingredients-form" method="POST" action="{{ request.path }}">
+                <ul class="ingredients-list">
+                    {% for ingredient in recipe.ingredients %}
+                        <li>
+                            <label class="ingredient-row">
+                                <input
+                                    type="checkbox"
+                                    class="ingredient-check"
+                                    name="selected_ingredients"
+                                    value="{{ ingredient[0] }}"
+                                    aria-hidden="true"
+                                    {% if ingredient[2] in selected_ingredients %}checked{% endif %} />
+                                <span class="ingredient-qty">{{ ingredient[0] }}</span>
+                            </label>
+                            <span class="ingredient-unit">{{ ingredient[1] }}</span>
+                            <span class="ingredient-name">{{ ingredient[2] }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
 
-            <div class="sidebar-actions">
-                <button class="btn btn-primary">Add selected to shopping</button>
-            </div>
+                <div class="sidebar-actions">
+                    <button class="btn btn-primary" type="submit">Add selected to shopping</button>
+                    <button class="btn btn-secondary" type="button" id="clear-all-ingredients">Clear Selection</button>
+                </div>
+            </form>
         </aside>
 
         <!-- Left: main content (title, image, description, instructions, meta) -->
@@ -64,7 +74,7 @@
                 </div>
 
                 <div class="button-container">
-                    <button class="save-recipe-button recipe-button" type="button" aria-label="Save Recipe to Active Recipes List">Save Recipe</button>
+                    <button class="save-recipe-button recipe-button" type="button" aria-label="Save Recipe to Active Recipes List" data-recipe-name="{{ recipe.name|e }}">{% if saved %} Unsave Recipe {% else %} Save Recipe {% endif %}</button>
                 </div>
             </div>
 

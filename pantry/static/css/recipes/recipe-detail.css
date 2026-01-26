@@ -73,38 +73,44 @@
 }
 
 .chip {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-neutral);
+    gap: 8px;
+    padding: 6px 12px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--color-neutral) 94%, #ffffff 6%) 0%, var(--color-neutral) 100%);
     color: var(--color-text);
-    padding: 5px 10px;
-    border-radius: 20px;
+    border-radius: 999px;
     font-size: 0.9em;
-    filter: drop-shadow(rgba(0,0,0,0.4) 0px 2px 4px);
-    transition: background-color 0.3s ease , transform 0.2s ease;
-    gap: 2px;
+    font-weight: 600;
+    filter: drop-shadow(rgba(0,0,0,0.18) 0px 2px 6px);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+    border: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent 40%);
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .desc{
-    background-color: green;
+    /* keep the original 'green' tone but present it as a polished pill */
+    background: linear-gradient(180deg, color-mix(in srgb, green 86%, #ffffff 14%) 0%, color-mix(in srgb, green 78%, #000000 22%) 100%);
     color: var(--color-text);
-    padding: 10px 15px;
-    border-radius: 20px;
+    padding: 6px 12px;
+    border-radius: 999px;
     font-size: 0.9em;
-    filter: drop-shadow(rgba(0,0,0,0.4) 0px 2px 4px);
-    transition: background-color 0.3s ease , transform 0.2s ease;
+    font-weight: 700;
+    filter: drop-shadow(rgba(0,0,0,0.18) 0px 2px 6px);
+    border: 1px solid color-mix(in srgb, var(--color-border) 30%, color-mix(in srgb, green 50%, transparent 50%) 70%);
 }
 
 .difficulty\;easy{
-    background-color: #4CAF50;
+    background: #4CAF50;!important;
 }
 .difficulty\;medium{
-    background-color: #FFC107;
+    background: #FFC107; !important;
     text-shadow: #0A0D0B 1px 1px 2px;
 }
 .difficulty\;hard {
-    background-color: #F44336;
+    background: #F44336;!important;
 }
 
 .difficulty\;easy:hover,
@@ -114,7 +120,8 @@
 }
 
 .chip:hover{
-    transform: translateY(-1.5px);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.22);
 }
 
 .recipe-image-container {
@@ -311,6 +318,7 @@
     height: fit-content;
     margin-left: 20px;
     border-radius: 15px;
+    text-wrap: nowrap;
     transition: transform 0.8s ease-out;
     padding: 20px;
     background: var(--list-bg);
@@ -339,6 +347,12 @@
     flex: 0 0 auto;
 }
 
+.sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .sidebar-actions .btn {
     width: 100%;
     margin: 10px 0;
@@ -350,6 +364,14 @@
     display: block;
     color: #fff;
     cursor: pointer;
+}
+
+.btn.btn-secondary {
+    margin: 0;
+    background: var(--color-neutral);
+    color: var(--color-text);
+    width: 80%;
+    align-self: center;
 }
 
 .ingredients-list{
@@ -388,7 +410,7 @@
     overflow: hidden;
 }
 
-.ingredient-name {
+.ingredient-qty {
     font-size: 1rem;
     line-height: 1;
     display: inline-flex;
@@ -396,7 +418,7 @@
     gap: 10px;
 }
 
-.ingredient-name::before {
+.ingredient-qty::before {
     content: "";
     display: inline-block;
     width: 22px;
@@ -409,7 +431,7 @@
     transition: background-color 180ms ease, border-color 180ms ease, transform 160ms ease;
 }
 
-.ingredient-check:checked + .ingredient-name::before {
+.ingredient-check:checked + .ingredient-qty::before {
     background: var(--color-accent);
     border-color: var(--color-accent);
     transform: scale(1.02);
@@ -419,23 +441,22 @@
     background-size: 60% 60%;
 }
 
-.ingredient-row:hover .ingredient-name::before {
+.ingredient-row:hover .ingredient-qty::before {
     border-color: color-mix(in srgb, var(--color-accent) 20%, var(--color-border));
 }
 
-.ingredient-check:focus + .ingredient-name::before {
+.ingredient-check:focus + .ingredient-qty::before {
     outline: 3px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
     outline-offset: 3px;
 }
 
-.ingredient-check:disabled + .ingredient-name {
+.ingredient-check:disabled + .ingredient-qty {
     opacity: 0.5;
 }
 
-.ingredient-qty {
+.ingredient-unit {
     color: var(--color-text, rgba(0,0,0,0.6));
     font-size: 0.95rem;
-    min-width: 72px;
 }
 
 .sidebar-toggle-button{
@@ -474,8 +495,7 @@
         flex-direction: row;
         align-items: center;
     }
-    .ingredient-qty {
-        min-width: 56px;
+    .ingredient-unit {
         font-size: 0.9rem;
     }
 }

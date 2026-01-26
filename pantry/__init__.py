@@ -11,6 +11,7 @@ from pantry.blueprints.recipes.recipes import recipes_bp
 from pantry.blueprints.shopping.shopping import shopping_bp
 from pantry.utilities.auth import get_current_user
 
+from pantry.blueprints.services import _repo
 
 def create_app():
     from flask import Flask
@@ -22,7 +23,7 @@ def create_app():
     if app.config["REPOSITORY"] == "memory":
         # Create the MemoryRepository implementation for a memory-based repository.
         repository.repo_instance = MemoryRepository()
-        populate(repository.repo_instance)
+        populate(_repo())
 
     # @app.errorhandler(404)
     # def page_not_found(error):

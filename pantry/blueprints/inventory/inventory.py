@@ -1,7 +1,8 @@
 from flask import render_template, Blueprint, request, session
 
-from pantry.adapters import repository
 from pantry.blueprints.authentication.authentication import login_required
+
+from pantry.blueprints.services import _repo
 
 inventory_bp = Blueprint("inventory_bp", __name__)
 
@@ -9,7 +10,7 @@ inventory_bp = Blueprint("inventory_bp", __name__)
 @inventory_bp.route("/inventory", methods=["GET", "POST"])
 @login_required
 def inventory():
-    repo = repository.repo_instance
+    repo = _repo()
     param = ""
     criteria = "name"
     inventory_items = []
@@ -41,7 +42,7 @@ def inventory():
 def inventory_api(name: str):
     from flask import jsonify
 
-    repo = repository.repo_instance
+    repo = _repo()
     ingredient = repo.get_ingredient_by_name(name)
     if ingredient:
         categories_str = ""
@@ -77,7 +78,7 @@ def update_inventory(name: str):
     from flask import jsonify
     import json
 
-    repo = repository.repo_instance
+    repo = _repo()
     username = session.get("username")
 
     if not username:
@@ -98,8 +99,19 @@ def update_inventory(name: str):
         if data is None:
             return jsonify({"success": False, "message": "Invalid JSON data"}), 400
 
-        quantity = int(data.get("quantity", 0))
+        # Validate quantity and unit explicitly to provide precise error messages
+        raw_quantity = data.get("quantity", None)
         unit = data.get("unit", "")
+
+        # Quantity must be provided and numeric
+        try:
+            quantity = int(raw_quantity)
+        except (TypeError, ValueError):
+            return jsonify({"success": False, "message": "Quantity must be a number"}), 400
+
+        # Quantity must not be negative
+        if quantity < 0:
+            return jsonify({"success": False, "message": "Quantity cannot be negative"}), 400
 
         user = repo.get_user_by_username(username)
         if not user:
@@ -108,6 +120,10 @@ def update_inventory(name: str):
         ingredient = repo.get_ingredient_by_name(name)
         if not ingredient:
             return jsonify({"success": False, "message": "Ingredient not found"}), 404
+
+        # Validate unit matches ingredient.unit
+        if unit and unit != ingredient.unit:
+            return jsonify({"success": False, "message": "Invalid unit"}), 400
 
         user.add_grocery(ingredient, quantity)
         repo.update_user(user)

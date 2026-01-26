@@ -94,6 +94,53 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def get_user_saved_recipes(self, user):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def user_has_saved_recipe(self, recipe, user):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def add_saved_recipe(self, recipe, user):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def remove_saved_recipe(self, recipe, user):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_user_recipe_ingredients_by_recipe_name(self, user, recipe_name):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def add_user_recipe_ingredient(self, user, recipe_name, ingredient_string):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def remove_user_recipe_ingredient(self, user, recipe_name, ingredient_string):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def add_multiple_user_recipe_ingredients(self, user, recipe_name, ingredient_strings: List):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def remove_multiple_user_recipe_ingredients(self, user, recipe_name, ingredient_strings: List):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def clear_user_recipe_ingredients(self, user, recipe_name):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def delete_user_recipe_ingredients_per_recipe(self, user, recipe_name):
+        raise NotImplementedError
+
+    def clear_recipe_ingredients(self, user):
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def update_user(self, user):
         raise NotImplementedError
 
