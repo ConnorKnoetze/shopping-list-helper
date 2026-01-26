@@ -3,8 +3,9 @@ from pathlib import Path
 
 from flask import render_template, Blueprint, session
 
-from pantry.adapters import repository
 from pantry.blueprints.authentication.authentication import login_required
+
+from pantry.blueprints.services import _repo
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 
@@ -16,7 +17,7 @@ shopping_bp = Blueprint("shopping", __name__)
 @shopping_bp.route("/shopping")
 @login_required
 def shopping():
-    repo = repository.repo_instance
+    repo = _repo()
     username = session.get("username")
     user = repo.get_user_by_username(username)
 
@@ -31,7 +32,7 @@ def shopping():
 def remove_from_shopping_api(name: str):
     from flask import jsonify
 
-    repo = repository.repo_instance
+    repo = _repo()
     username = session.get("username")
     user = repo.get_user_by_username(username)
 
@@ -62,7 +63,7 @@ def remove_from_shopping_api(name: str):
 def download_shopping_list_api():
     from flask import jsonify
 
-    repo = repository.repo_instance
+    repo = _repo()
     username = session.get("username")
     user = repo.get_user_by_username(username)
 
