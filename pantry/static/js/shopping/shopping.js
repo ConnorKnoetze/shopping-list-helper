@@ -109,4 +109,100 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         );
     });
+
+    // Delete saved recipe
+    const deleteRecipeButtons = document.querySelectorAll('.delete-saved-recipe-button');
+    deleteRecipeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const recipeName = this.name;
+            console.log('Deleting saved recipe with Name:', recipeName);
+
+            fetch(`/shopping/api/delete_recipe/${recipeName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(res => res.json())
+            .then(response => {
+                console.log('Server response:', response);
+
+                if (response.success) {
+                    const recipeElement = document.getElementById(recipeName);
+                    if (recipeElement) {
+                        recipeElement.remove();
+
+                        const savedRecipeCard = document.querySelector('.saved-recipe-ingredient-list-container');
+                        if (savedRecipeCard) {
+                            const groceryItemCard = document.querySelector('.grocery-item-card')
+                            if (!groceryItemCard) {
+                                document.querySelector('.download-grocery-list-button').remove();
+                            }
+                            const groceryList = document.querySelector('.grocery-list')
+                            if (groceryList) {
+                                window.location.reload()
+                            }
+                        }
+                    }
+                } else {
+                    alert(`Error: ${response.message || 'Failed to delete recipe'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting recipe:', error);
+                alert('Error deleting recipe. Please try again.');
+            }
+            );
+        }
+        );
+    });
+
+    // Delete Saved Recipe Required Ingredient
+    const ingredientRemoveButtons = document.querySelectorAll('.remove-saved-recipe-ingredient-button');
+    ingredientRemoveButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const recipeName = this.name.split("::")[0];
+            const ingredientName = this.name.split("::")[1];
+            console.log('Removing ingredient from saved recipe:', ingredientName, 'from recipe:', recipeName);
+
+            fetch(`/shopping/api/remove_saved_recipe_ingredient/${recipeName}/${ingredientName}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(res => res.json())
+            .then(response => {
+                console.log('Server response:', response);
+
+                if (response.success) {
+                    const ingredientElement = document.getElementById(`${ingredientName}`);
+                    if (ingredientElement) {
+                        ingredientElement.remove();
+
+                        const savedRecipeCard = document.querySelector('.saved-recipe-ingredient-list-container');
+                        if (savedRecipeCard) {
+                            const groceryItemCard = document.querySelector('.grocery-item-card')
+                            if (!groceryItemCard) {
+                                document.querySelector('.download-grocery-list-button').remove();
+                            }
+                            const groceryList = document.querySelector('.grocery-list')
+                            if (groceryList) {
+                                window.location.reload()
+                            }
+                        }
+                    }
+                } else {
+                    alert(`Error: ${response.message || 'Failed to remove ingredient'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error removing ingredient:', error);
+                alert('Error removing ingredient. Please try again.');
+            }
+            );
+        }
+        );
+    });
+
 });

@@ -18,6 +18,13 @@ class MemoryRepository(AbstractRepository):
                 username="CNK",
                 email="connorknoetze@gmail.com",
                 password_hash="scrypt:32768:8:1$8B3wBNdfVYip2e7v$7e6807f0c31ca8718ee1b4ed9d0e22ce715a52c15bc5eb273c9e7d6d87169aa9436c0802fccd061192557281aa258a18e1dac4bd44814e6ba8e7852aeccae19d",
+            ),
+            User(
+                user_id=2,
+                username="Connor",
+                email="example@gmail.com",
+                password_hash="scrypt:32768:8:1$6JSrcBOnzaJfWwN6$652022ef1b69f25d9022d975e087090c8271623515cdda680920bb415d6ee4dd5b2a6315d86424e64da2a69c35a2d02fe9d0a3dfb58538107c416dffe4626678"
+
             )
         ]
         self.__recipes: List[recipe] = []
