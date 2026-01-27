@@ -82,6 +82,46 @@ class MemoryRepository(AbstractRepository):
     def get_user_by_email(self, email_clean: str) -> User:
         return next((u for u in self.__users if u.email == email_clean), None)
 
+    def get_user_saved_recipes(self, user):
+        return user.saved_recipes
+
+    def add_saved_recipe(self, recipe, user):
+        user.save_recipe(recipe)
+
+    def user_has_saved_recipe(self, recipe, user):
+        return recipe in user.saved_recipes
+
+    def remove_saved_recipe(self, recipe, user):
+        user.remove_saved_recipe(recipe)
+
+    def get_user_recipe_ingredients_by_recipe_name(self, user, recipe_name):
+        return user.recipe_ingredients.get(recipe_name, [])
+
+    def add_user_recipe_ingredient(self, user, recipe_name, ingredient_string):
+        user.add_recipe_ingredient(recipe_name, ingredient_string)
+
+    def remove_user_recipe_ingredient(self, user, recipe_name, ingredient_string):
+        user.remove_recipe_ingredient(recipe_name, ingredient_string)
+
+    def add_multiple_user_recipe_ingredients(
+        self, user, recipe_name, ingredient_strings: List
+    ):
+        user.add_multiple_recipe_ingredients(recipe_name, ingredient_strings)
+
+    def remove_multiple_user_recipe_ingredients(
+        self, user, recipe_name, ingredient_strings: List
+    ):
+        user.remove_recipe_ingredients(recipe_name, ingredient_strings)
+
+    def clear_user_recipe_ingredients(self, user, recipe_name):
+        user.clear_recipe_ingredients_by_recipe(recipe_name)
+
+    def delete_user_recipe_ingredients_per_recipe(self, user, recipe_name):
+        user.delete_recipe_ingredients_per_recipe(recipe_name)
+
+    def clear_recipe_ingredients(self, user):
+        user.clear_all_recipe_ingredients()
+
     def update_user(self, user: User):
         for idx, existing_user in enumerate(self.__users):
             if existing_user.id == user.id:
@@ -96,7 +136,9 @@ class MemoryRepository(AbstractRepository):
         self.__recipes.extend(recipes)
 
     def get_recipe_by_name(self, name: str) -> recipe:
-        return next((rec for rec in self.__recipes if rec.name.lower() == name.lower()), None)
+        return next(
+            (rec for rec in self.__recipes if rec.name.lower() == name.lower()), None
+        )
 
     def get_recipes_by_category(self, category: str) -> List:
         return [rec for rec in self.__recipes if rec.category == category]

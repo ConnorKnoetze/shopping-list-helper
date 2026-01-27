@@ -5,16 +5,17 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, ValidationError
 from password_validator import PasswordValidator
 
-from pantry.adapters import repository
 from pantry.blueprints.authentication import services
 from pantry.utilities.auth import is_logged_in
+
+from pantry.blueprints.services import _repo
 
 authentication_blueprint = Blueprint("authentication_bp", __name__, url_prefix="/auth")
 
 
 @authentication_blueprint.route("/login", methods=["GET", "POST"])
 def login():
-    repo = repository.repo_instance
+    repo = _repo()
     form = LoginForm()
     username_not_recognized = None
     password_does_not_match = None
@@ -88,7 +89,7 @@ def register():
                     form.username.data,
                     form.email.data,
                     password_hash,
-                    repository.repo_instance,
+                    _repo(),
                 )
                 return redirect(url_for("authentication_bp.login"))
             except services.NameNotUniqueException:

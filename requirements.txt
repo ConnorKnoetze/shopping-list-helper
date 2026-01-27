@@ -3,3 +3,9 @@ python-dotenv~=1.2.1
 password-validator==1.0
 wtforms==3.2.1
 Flask-WTF==1.2.2
+
+# Testing
+pytest>=7.0.0
+pytest-flask>=1.2.0
+pytest-mock>=3.10.0
+coverage>=7.0.0

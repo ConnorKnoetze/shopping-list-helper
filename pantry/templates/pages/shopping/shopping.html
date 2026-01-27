@@ -8,21 +8,57 @@
 
 {% block main %}
 {#  A list of grocery items  #}
-    <section class="grocery-list-container">
-        <h2 class="section-title">Grocery List</h2>
-        {% if grocery_items %}
-            <button class="download-grocery-list-button" type="button" aria-label="Download grocery list as text file">Download List</button>
+    <div class="page-container">
+
+        {% if grocery_items or saved_recipes%}
+            <button class="download-grocery-list-button" type="button" aria-label="Download grocery list as text file">Download Combined List</button>
         {% endif %}
-        <div class="grocery-list">
-            {% for item in grocery_items %}
-                <div class="grocery-item-card" id="{{ item.name }}">
-                    <p class="grocery-item-name">{{ item.name }}</p>
-                    <p class="grocery-item-quantity">Quantity: {{ item.quantity }} {{ item.unit }}</p>
-                    <button class="remove-item-button" name="{{ item.name }}" aria-label="Remove {{ item.name }} from grocery list">&times;</button>
+
+        <div class="page-panel shopping-page-panel">
+            <section class="grocery-list-container">
+                <h2 class="section-title">General Grocery List</h2>
+                <div class="grocery-list">
+                    {% for item in grocery_items %}
+                        <div class="grocery-item-card" id="{{ item.name }}">
+                            <p class="grocery-item-name">{{ item.name }}</p>
+                            <p class="grocery-item-quantity">Quantity: {{ item.quantity }} {{ item.unit }}</p>
+                            <button class="remove-item-button" name="{{ item.name }}" aria-label="Remove {{ item.name }} from grocery list">&times;</button>
+                        </div>
+                    {% else %}
+                        <p class="no-items-message">No items in grocery list.</p>
+                    {% endfor %}
                 </div>
-            {% else %}
-                <p class="no-items-message">No items in grocery list.</p>
-            {% endfor %}
+            </section>
+
+            {% if saved_recipes %}
+            <section class="saved-recipe-ingredient-list-container">
+                <h2 class="section-title">Ingredients from Saved Recipes</h2>
+                    <div class="saved-recipes-list">
+                        {% for recipe in saved_recipes %}
+                            <div class="saved-recipe-card">
+                                <h3 class="saved-recipe-name">{{ recipe.name }}</h3>
+                                <ul class="ingredients-list">
+                                    {% for ingredient in recipe_ingredients[recipe.name.lower()] %}
+                                        <li>
+                                            <div class="per-recipe-ingredient-row">
+                                                <span class="ingredient-name">
+                                                    {{ ingredient[2] }}
+                                                </span>
+                                                <span class="ingredient-qty-unit">
+                                                    Quantity: {{ ingredient[0] }} {{ ingredient[1] }}
+                                                </span>
+                                                <button class="remove-saved-recipe-ingredient-button" name="{{ recipe.name }}::{{ ingredient[2] }}" aria-label="Remove {{ ingredient[2] }} from {{ recipe.name }} ingredients">&times;</button>
+                                            </div>
+                                        </li>
+                                        {% else %}
+                                        <li class="no-ingredients-message">You have not selected any required ingredients for this recipe.</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endfor %}
+                    </div>
+            </section>
+            {% endif %}
         </div>
-    </section>
+    </div>
 {% endblock %}
