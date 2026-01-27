@@ -189,6 +189,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     saveButton.classList.remove("saved");
                     saveButton.innerText = "Save Recipe";
+                    window.location.href = `/recipes/${data.recipe_name}`;
                 }
             })
             .catch(error => console.error('Error:', error));

@@ -66,7 +66,7 @@ class User:
     def recipe_ingredients(self) -> dict[Any]:
         return self.__recipe_ingredients
 
-    def add_recipe_ingredient(self, recipe_name ,ingredient_string: str) -> None:
+    def add_recipe_ingredient(self, recipe_name, ingredient_string: str) -> None:
         if recipe_name not in self.__recipe_ingredients:
             self.__recipe_ingredients[recipe_name] = []
         if ingredient_string not in self.__recipe_ingredients[recipe_name]:
@@ -75,22 +75,30 @@ class User:
     def remove_recipe_ingredient(self, recipe_name, ingredient_string: str) -> None:
         if recipe_name in self.__recipe_ingredients:
             self.__recipe_ingredients[recipe_name] = [
-                ing for ing in self.__recipe_ingredients[recipe_name] if ing != ingredient_string
+                ing
+                for ing in self.__recipe_ingredients[recipe_name]
+                if ing != ingredient_string
             ]
             if not self.__recipe_ingredients[recipe_name]:
                 del self.__recipe_ingredients[recipe_name]
 
-    def add_multiple_recipe_ingredients(self, recipe_name, ingredient_strings: List[str]) -> None:
+    def add_multiple_recipe_ingredients(
+        self, recipe_name, ingredient_strings: List[str]
+    ) -> None:
         if recipe_name not in self.__recipe_ingredients:
             self.__recipe_ingredients[recipe_name] = []
         for string in ingredient_strings:
             if string not in self.__recipe_ingredients[recipe_name]:
                 self.__recipe_ingredients[recipe_name].append(string)
 
-    def remove_multiple_recipe_ingredients(self, recipe,ingredient_strings: List[str]) -> None:
+    def remove_multiple_recipe_ingredients(
+        self, recipe, ingredient_strings: List[str]
+    ) -> None:
         if recipe in self.__recipe_ingredients:
             self.__recipe_ingredients[recipe] = [
-                ing for ing in self.__recipe_ingredients[recipe] if ing not in ingredient_strings
+                ing
+                for ing in self.__recipe_ingredients[recipe]
+                if ing not in ingredient_strings
             ]
             if not self.__recipe_ingredients[recipe]:
                 del self.__recipe_ingredients[recipe]

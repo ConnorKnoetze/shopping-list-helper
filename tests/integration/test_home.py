@@ -7,7 +7,9 @@ def test_home_requires_login(client):
 def test_home_page_logged_in(client, memory_repo):
     from tests.utils import make_user, login_user
 
-    user = make_user(memory_repo, username="alice", email="alice@example.com", password="Password1")
+    user = make_user(
+        memory_repo, username="alice", email="alice@example.com", password="Password1"
+    )
     # login
     resp = login_user(client, "alice", "Password1")
     assert resp.status_code == 200
@@ -16,10 +18,13 @@ def test_home_page_logged_in(client, memory_repo):
     assert resp2.status_code == 200
     assert b"ingredients" in resp2.data or b"Home" in resp2.data
 
+
 def test_home_page_content(client, memory_repo):
     from tests.utils import make_user, login_user
 
-    user = make_user(memory_repo, username="dave", email="dave@dave.com", password="Password1")
+    user = make_user(
+        memory_repo, username="dave", email="dave@dave.com", password="Password1"
+    )
     # login
     resp = login_user(client, "dave", "Password1")
     assert resp.status_code == 200
@@ -32,10 +37,13 @@ def test_home_page_content(client, memory_repo):
     assert b"View Recipes" in resp2.data
     assert b"Start Shopping" in resp2.data or b"Start Shopping List" in resp2.data
 
+
 def test_home_page_no_ingredients_message(client, memory_repo):
     from tests.utils import make_user, login_user
 
-    user = make_user(memory_repo, username="eve", email="eve@gmail.com", password="Password1")
+    user = make_user(
+        memory_repo, username="eve", email="eve@gmail.com", password="Password1"
+    )
     # login
     resp = login_user(client, "eve", "Password1")
     assert resp.status_code == 200
@@ -58,10 +66,13 @@ def test_home_page_no_ingredients_message(client, memory_repo):
         # restore original ingredients
         setattr(repo, attr_name, original_ings)
 
+
 def test_home_page_ingredient_listed(client, memory_repo):
     from tests.utils import make_user, login_user
 
-    user = make_user(memory_repo, username="frank", email="frank@gmail.com", password="Password1")
+    user = make_user(
+        memory_repo, username="frank", email="frank@gmail.com", password="Password1"
+    )
     # login
     resp = login_user(client, "frank", "Password1")
     assert resp.status_code == 200
@@ -72,9 +83,15 @@ def test_home_page_ingredient_listed(client, memory_repo):
     # Get the first page of ingredients from the repo and ensure at least one name appears
     ingredient_list = memory_repo.get_all_ingredients()[:10]
     # Build a list of candidate names (string) to search for
-    candidate_names = [getattr(i, 'name', str(i)) for i in ingredient_list]
+    candidate_names = [getattr(i, "name", str(i)) for i in ingredient_list]
 
-    assert any(name.encode() in resp2.data for name in candidate_names), "No ingredient names from repo found in home page output"
+    assert any(name.encode() in resp2.data for name in candidate_names), (
+        "No ingredient names from repo found in home page output"
+    )
 
     # Check that the ingredients grid / card markup is present
-    assert b"ingredients-grid" in resp2.data or b"inventory-card" in resp2.data or b"item-name" in resp2.data
+    assert (
+        b"ingredients-grid" in resp2.data
+        or b"inventory-card" in resp2.data
+        or b"item-name" in resp2.data
+    )

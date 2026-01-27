@@ -122,11 +122,15 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def add_multiple_user_recipe_ingredients(self, user, recipe_name, ingredient_strings: List):
+    def add_multiple_user_recipe_ingredients(
+        self, user, recipe_name, ingredient_strings: List
+    ):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def remove_multiple_user_recipe_ingredients(self, user, recipe_name, ingredient_strings: List):
+    def remove_multiple_user_recipe_ingredients(
+        self, user, recipe_name, ingredient_strings: List
+    ):
         raise NotImplementedError
 
     @abc.abstractmethod

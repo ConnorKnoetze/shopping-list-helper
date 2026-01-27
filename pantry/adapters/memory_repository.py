@@ -103,10 +103,14 @@ class MemoryRepository(AbstractRepository):
     def remove_user_recipe_ingredient(self, user, recipe_name, ingredient_string):
         user.remove_recipe_ingredient(recipe_name, ingredient_string)
 
-    def add_multiple_user_recipe_ingredients(self, user, recipe_name, ingredient_strings: List):
+    def add_multiple_user_recipe_ingredients(
+        self, user, recipe_name, ingredient_strings: List
+    ):
         user.add_multiple_recipe_ingredients(recipe_name, ingredient_strings)
 
-    def remove_multiple_user_recipe_ingredients(self, user, recipe_name, ingredient_strings: List):
+    def remove_multiple_user_recipe_ingredients(
+        self, user, recipe_name, ingredient_strings: List
+    ):
         user.remove_recipe_ingredients(recipe_name, ingredient_strings)
 
     def clear_user_recipe_ingredients(self, user, recipe_name):

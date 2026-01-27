@@ -2,7 +2,9 @@ def test_recipes_list_and_detail(client, memory_repo):
     from tests.utils import make_user, login_user
 
     # create user and recipe
-    user = make_user(memory_repo, username="bob", email="bob@example.com", password="Password1")
+    user = make_user(
+        memory_repo, username="bob", email="bob@example.com", password="Password1"
+    )
     # add a recipe object
     from pantry.domainmodel.recipe import Recipe
     from pantry.domainmodel.ingredient import Ingredient

@@ -3,7 +3,9 @@ from tests.utils import make_user, login_user
 
 def test_shopping_remove_and_download(client, memory_repo):
     # create user and add grocery
-    user = make_user(memory_repo, username="kate", email="kate@example.com", password="Password1")
+    user = make_user(
+        memory_repo, username="kate", email="kate@example.com", password="Password1"
+    )
     # ensure an ingredient exists
     ing = memory_repo.get_ingredient_by_name("Carrot")
     assert ing is not None
