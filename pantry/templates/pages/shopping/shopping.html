@@ -35,11 +35,11 @@
                 <h2 class="section-title">Ingredients from Saved Recipes</h2>
                     <div class="saved-recipes-list">
                         {% for recipe in saved_recipes %}
-                            <div class="saved-recipe-card">
+                            <div class="saved-recipe-card" id="{{ recipe.name }}">
                                 <h3 class="saved-recipe-name">{{ recipe.name }}</h3>
                                 <ul class="ingredients-list">
                                     {% for ingredient in recipe_ingredients[recipe.name.lower()] %}
-                                        <li>
+                                        <li id="{{ ingredient[2] }}">
                                             <div class="per-recipe-ingredient-row">
                                                 <span class="ingredient-name">
                                                     {{ ingredient[2] }}
@@ -54,6 +54,7 @@
                                         <li class="no-ingredients-message">You have not selected any required ingredients for this recipe.</li>
                                     {% endfor %}
                                 </ul>
+                                <button class="delete-saved-recipe-button" name="{{ recipe.name }}" aria-label="Delete all ingredients from {{ recipe.name }}">&times;</button>
                             </div>
                         {% endfor %}
                     </div>
