@@ -13,7 +13,6 @@ from pantry.utilities.auth import get_current_user
 
 from pantry.blueprints.services import _repo
 
-
 def create_app():
     from flask import Flask
 
