@@ -3,7 +3,9 @@ from tests.utils import make_user, login_user
 
 def test_register_and_login_flow(client, memory_repo):
     # register via service to avoid dealing with form CSRF
-    user = make_user(memory_repo, username="carol", email="carol@example.com", password="Password1")
+    user = make_user(
+        memory_repo, username="carol", email="carol@example.com", password="Password1"
+    )
 
     # login
     resp = login_user(client, "carol", "Password1")

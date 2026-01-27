@@ -22,4 +22,5 @@ def test_datareader_parses_files():
 
     # recipes should be Recipe instances and contain ids
     from pantry.domainmodel.recipe import Recipe
+
     assert any(isinstance(r, Recipe) for r in recs)

@@ -23,8 +23,14 @@ def shopping():
 
     grocery_list = user.grocery_list if user else []
 
+    print(user.recipe_ingredients)
     # Pass the variable name expected by the template
-    return render_template("pages/shopping/shopping.html", grocery_items=grocery_list)
+    return render_template(
+        "pages/shopping/shopping.html",
+        grocery_items=grocery_list,
+        saved_recipes=user.saved_recipes,
+        recipe_ingredients=user.recipe_ingredients,
+    )
 
 
 @shopping_bp.route("/shopping/api/remove/<string:name>", methods=["POST"])

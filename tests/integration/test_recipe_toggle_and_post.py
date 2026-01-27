@@ -3,7 +3,9 @@ from tests.utils import make_user, login_user
 
 def test_toggle_save_recipe_and_post_ingredients(client, memory_repo):
     # create a user and add a recipe
-    user = make_user(memory_repo, username="sam", email="sam@example.com", password="Password1")
+    user = make_user(
+        memory_repo, username="sam", email="sam@example.com", password="Password1"
+    )
     from pantry.domainmodel.recipe import Recipe
     from pantry.domainmodel.ingredient import Ingredient
 

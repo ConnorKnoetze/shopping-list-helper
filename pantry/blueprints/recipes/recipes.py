@@ -11,6 +11,13 @@ recipes_bp = Blueprint("recipes_bp", __name__)
 @recipes_bp.route("/recipes")
 @login_required
 def recipes():
+    """
+    Route for displaying all recipes.
+    :return:
+        Page template for recipes with context including:
+        - recipes: List of all recipe objects retrieved from the repository.
+    """
+
     repo = _repo()
 
     recipes = repo.get_all_recipes()
@@ -21,6 +28,17 @@ def recipes():
 @recipes_bp.route("/recipes/<string:recipe_name>", methods=["GET", "POST"])
 @login_required
 def recipe_detail(recipe_name):
+    """
+        Route for displaying the details of a specific recipe and handling ingredient selection.
+    :param recipe_name:
+    :return:
+        Page template for recipe details with context including:
+        - recipe: The recipe object retrieved from the repository.
+        - ingredients: List of ingredients for the recipe.
+        - selected_ingredients: List of ingredients selected by the user.
+        - saved: Boolean indicating if the recipe is saved by the user.
+    404 Not Found if the recipe does not exist.
+    """
     selected_ingredients = []
     username = session.get("username")
     repo = _repo()
@@ -44,22 +62,39 @@ def recipe_detail(recipe_name):
         user_ingredients = []
 
     if not selected_ingredients and user_ingredients:
-        selected_ingredients = user_ingredients
+        selected_ingredients = [ingredient[2] for ingredient in user_ingredients]
 
-    print(repo.get_user_by_username(username).recipe_ingredients, repo.get_user_by_username(username).saved_recipes)
+    print(
+        selected_ingredients,
+        repo.get_user_by_username(username).recipe_ingredients,
+        repo.get_user_by_username(username).saved_recipes,
+    )
 
     return render_template(
         "pages/recipes/recipe-detail.html",
         recipe=recipe,
         ingredients=recipe.ingredients,
         selected_ingredients=selected_ingredients,
-        saved=recipe in user.saved_recipes
+        saved=recipe in user.saved_recipes,
     )
 
 
 @recipes_bp.route("/recipes/toggle_save/<string:recipe_name>", methods=["POST"])
 @login_required
 def toggle_save_recipe(recipe_name):
+    """
+        API endpoint to toggle saving a recipe for the logged-in user.
+        If the recipe is already saved, it will be removed from the user's saved recipes.
+        If not, it will be added. And the repository will be updated accordingly.
+    Args:
+        recipe_name (str): The name of the recipe to toggle save status for.
+    Returns:
+        dict: A JSON response containing:
+        "saved": <bool>,  # True if the recipe is now saved, False if removed
+
+        "recipe_name": <str>  # The recipe name matched to the URL format (lowercase, hyphen-separated)
+    200 OK on success, 404 Not Found if the recipe does not exist.
+    """
     username = session.get("username")
     repo = _repo()
     user = repo.get_user_by_username(username)
@@ -78,6 +113,7 @@ def toggle_save_recipe(recipe_name):
 
     repo.update_user(user)
 
-    print(user.recipe_ingredients, user.saved_recipes, saved)
-
-    return {"saved": saved}
+    return {
+        "saved": saved,
+        "recipe_name": "-".join(recipe.name.lower().split(" ")),
+    }, 200

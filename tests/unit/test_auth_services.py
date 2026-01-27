@@ -26,7 +26,9 @@ def test_authenticate_user_failure(memory_repo):
     from werkzeug.security import generate_password_hash
 
     pw = "Secret1"
-    user = memory_repo.create_user("authuser", "auth@example.com", generate_password_hash(pw))
+    user = memory_repo.create_user(
+        "authuser", "auth@example.com", generate_password_hash(pw)
+    )
     memory_repo.add_user(user)
 
     with pytest.raises(services.AuthenticationException):

@@ -107,11 +107,15 @@ def update_inventory(name: str):
         try:
             quantity = int(raw_quantity)
         except (TypeError, ValueError):
-            return jsonify({"success": False, "message": "Quantity must be a number"}), 400
+            return jsonify(
+                {"success": False, "message": "Quantity must be a number"}
+            ), 400
 
         # Quantity must not be negative
         if quantity < 0:
-            return jsonify({"success": False, "message": "Quantity cannot be negative"}), 400
+            return jsonify(
+                {"success": False, "message": "Quantity cannot be negative"}
+            ), 400
 
         user = repo.get_user_by_username(username)
         if not user:

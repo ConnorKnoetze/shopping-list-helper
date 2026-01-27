@@ -1,6 +1,7 @@
 from pantry.blueprints.services import _repo
 
-def _handle_recipe_ingredients_form(selected, user, recipe_name,repo):
+
+def _handle_recipe_ingredients_form(selected, user, recipe_name, repo):
     selected_ingredients = [ingredient.split(";;")[2] for ingredient in selected]
     handled_ingredients = [ingredient.split(";;") for ingredient in selected]
     repo.clear_user_recipe_ingredients(user, recipe_name)

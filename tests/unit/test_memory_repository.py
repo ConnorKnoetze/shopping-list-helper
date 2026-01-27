@@ -1,4 +1,6 @@
-def test_memory_repository_basic_ops(memory_repo, sample_ingredient, sample_category, sample_recipe):
+def test_memory_repository_basic_ops(
+    memory_repo, sample_ingredient, sample_category, sample_recipe
+):
     # add and retrieve ingredient
     memory_repo.add_ingredient(sample_ingredient)
     ing = memory_repo.get_ingredient_by_name("Sugar")
@@ -31,6 +33,11 @@ def test_user_saved_recipe_and_ingredients(memory_repo, sample_recipe):
 
     # recipe ingredients manipulation
     memory_repo.add_user_recipe_ingredient(user, sample_recipe.name, "1 cup flour")
-    assert "1 cup flour" in memory_repo.get_user_recipe_ingredients_by_recipe_name(user, sample_recipe.name)
+    assert "1 cup flour" in memory_repo.get_user_recipe_ingredients_by_recipe_name(
+        user, sample_recipe.name
+    )
     memory_repo.clear_user_recipe_ingredients(user, sample_recipe.name)
-    assert memory_repo.get_user_recipe_ingredients_by_recipe_name(user, sample_recipe.name) == []
+    assert (
+        memory_repo.get_user_recipe_ingredients_by_recipe_name(user, sample_recipe.name)
+        == []
+    )

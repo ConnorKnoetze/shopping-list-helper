@@ -32,6 +32,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error downloading grocery list:', error);
                 alert('Error downloading grocery list. Please try again.');
             });
+            fetch('/shopping/api/download', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
+            .then(data => {
+                const blob = new Blob([data.shopping_list], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'grocery_list.txt');
+                document.body.appendChild(link);
+                link.click();
+                window.URL.revokeObjectURL(url);
+                link.parentNode.removeChild(link);
+            })
+            .catch(error => {
+                console.error('Error downloading grocery list:', error);
+                alert('Error downloading grocery list. Please try again.');
+            });
         });
     }
 
@@ -56,13 +83,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     const itemElement = document.getElementById(itemName);
                     if (itemElement) {
                         itemElement.remove();
-                        if (!document.querySelector('.grocery-item-card')){
-                            document.querySelector('.download-grocery-list-button').remove();
+
+                        const groceryItemCard = document.querySelector('.grocery-item-card')
+
+                        if (!groceryItemCard){
+                            const savedRecipeCard = document.querySelector('.saved-recipe-ingredient-list-container');
+                            if (!savedRecipeCard) {
+                                document.querySelector('.download-grocery-list-button').remove();
+                            }
                             const groceryList = document.querySelector('.grocery-list')
                             if (groceryList) {
-                                const emptyMessage = document.createElement('p');
-                                emptyMessage.textContent = 'Your grocery list is empty.';
-                                groceryList.appendChild(emptyMessage);
+                                window.location.reload()
                             }
                         }
                     }
