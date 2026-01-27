@@ -73,14 +73,15 @@ class User:
             self.__recipe_ingredients[recipe_name].append(ingredient_string)
 
     def remove_recipe_ingredient(self, recipe_name, ingredient_string: str) -> None:
-        if recipe_name in self.__recipe_ingredients:
-            self.__recipe_ingredients[recipe_name] = [
+        lowered_name = recipe_name.lower()
+        if lowered_name in self.__recipe_ingredients:
+            self.__recipe_ingredients[lowered_name] = [
                 ing
-                for ing in self.__recipe_ingredients[recipe_name]
-                if ing != ingredient_string
+                for ing in self.__recipe_ingredients[lowered_name]
+                if ing[2] != ingredient_string
             ]
-            if not self.__recipe_ingredients[recipe_name]:
-                del self.__recipe_ingredients[recipe_name]
+            if not self.__recipe_ingredients[lowered_name]:
+                del self.__recipe_ingredients[lowered_name]
 
     def add_multiple_recipe_ingredients(
         self, recipe_name, ingredient_strings: List[str]

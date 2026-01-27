@@ -80,3 +80,73 @@ def download_shopping_list_api():
         shopping_list_text += f"- {item.name}: {item.quantity} {item.unit}\n"
 
     return jsonify({"shopping_list": shopping_list_text}), 200
+
+
+@shopping_bp.route("/shopping/api/delete_recipe/<string:recipe_name>", methods=["GET", "POST"])
+@login_required
+def delete_recipe_from_shopping_api(recipe_name: str):
+    from flask import jsonify
+
+    repo = _repo()
+    username = session.get("username")
+    user = repo.get_user_by_username(username)
+
+    recipe_to_delete = None
+    for recipe in user.saved_recipes:
+        if recipe.name == recipe_name:
+            recipe_to_delete = recipe
+            break
+
+    if recipe_to_delete:
+        user.saved_recipes.remove(recipe_to_delete)
+        # Also remove associated ingredients from grocery list
+        for ingredient in recipe_to_delete.ingredients:
+            if ingredient in user.grocery_list:
+                user.grocery_list.remove(ingredient)
+        repo.update_user(user)
+        return jsonify(
+            {
+                "success": True,
+                "message": f"Recipe '{recipe_name}' and its ingredients removed from grocery list.",
+                "recipe_name": recipe_name,
+            }
+        ), 200
+    else:
+        return jsonify(
+            {
+                "success": False,
+                "message": f"Recipe '{recipe_name}' not found in saved recipes.",
+                "recipe_name": recipe_name,
+            }
+        ), 404
+
+@shopping_bp.route("/shopping/api/remove_saved_recipe_ingredient/<string:recipe_name>/<string:ingredient_name>", methods=["POST"])
+@login_required
+def remove_saved_recipe_ingredient_api(recipe_name: str, ingredient_name: str):
+    from flask import jsonify
+
+    repo = _repo()
+    username = session.get("username")
+    user = repo.get_user_by_username(username)
+
+    try:
+        user.remove_recipe_ingredient(recipe_name, ingredient_name)
+    except Exception as e:
+        return jsonify(
+            {
+                "success": False,
+                "message": str(e),
+                "ingredient_name": ingredient_name,
+                "recipe_name": recipe_name,
+            }
+        ), 400
+    repo.update_user(user)
+
+    return jsonify(
+        {
+            "success": True,
+            "message": f"Ingredient '{ingredient_name}' removed from recipe '{recipe_name}' and grocery list.",
+            "ingredient_name": ingredient_name,
+            "recipe_name": recipe_name,
+        }
+    ), 200
