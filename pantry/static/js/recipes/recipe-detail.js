@@ -101,22 +101,67 @@ document.addEventListener("DOMContentLoaded", function() {
                 return `${qty};;${unit};;${name}`;
             });
 
-            // create a form and hidden inputs for ingredients[] then submit
-            const form = document.createElement("form");
-            form.method = "POST";
-            form.action = ingredientSubmitButton.datasetAction || window.location.href;
+            // --- AJAX submission  ---
+            const formAction = ingredientSubmitButton.datasetAction || window.location.href;
+            const fd = new FormData();
+            ingredients.forEach(value => fd.append('ingredients[]', value));
 
-            ingredients.forEach(value => {
-                const input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "ingredients[]";
-                input.value = value;
-                form.appendChild(input);
+            fd.append('ajax', '1');
+
+            // disable button while in-flight
+            ingredientSubmitButton.disabled = true;
+            const originalText = ingredientSubmitButton.textContent;
+            ingredientSubmitButton.textContent = 'Adding...';
+
+            // prepare headers (CSRF token if present)
+            const headers = {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            };
+            const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            if (csrfMeta) headers['X-CSRF-Token'] = csrfMeta.getAttribute('content') || '';
+
+            fetch(formAction, {
+                method: 'POST',
+                headers: headers,
+                body: fd,
+                credentials: 'same-origin'
+            })
+            .then(res => {
+                if (!res.ok) throw res;
+                const ct = res.headers.get('content-type') || '';
+                if (ct.includes('application/json')) return res.json();
+                return Promise.resolve({ ok: true });
+            })
+            .then(data => {
+                // show toast with either server-provided message or a generic one
+                const count = ingredients.length;
+                const msg = (data && data.message) ? data.message : `${count} ingredient${count === 1 ? '' : 's'} added to shopping list`;
+                if (typeof addSuccessToast === 'function') addSuccessToast(msg);
+
+                // visually uncheck the boxes that were added
+                checkedBoxes.forEach(cb => cb.checked = false);
+
+                // restore button
+                ingredientSubmitButton.disabled = false;
+                ingredientSubmitButton.textContent = originalText;
+            })
+            .catch(err => {
+                // try to extract useful info, otherwise generic error
+                if (err && typeof err.text === 'function') {
+                    err.text().then(t => {
+                        console.error('Error adding ingredients:', t);
+                        alert('Error adding ingredients: ' + (t || 'server error'));
+                    }).catch(() => alert('Error adding ingredients'));
+                } else {
+                    console.error('Error adding ingredients:', err);
+                    alert('Error adding ingredients. Please try again.');
+                }
+                ingredientSubmitButton.disabled = false;
+                ingredientSubmitButton.textContent = originalText;
             });
 
-            // attach and submit
-            document.body.appendChild(form);
-            form.submit();
+            // --- end AJAX flow ---
         });
     }
 
@@ -129,17 +174,14 @@ document.addEventListener("DOMContentLoaded", function() {
             // visually uncheck all boxes
             const checkedBoxes = document.querySelectorAll(".ingredient-check:checked");
 
-            // collect checked checkboxes
             if (checkedBoxes.length === 0) {
                 return; // nothing to submit
             }
 
             checkedBoxes.forEach(cb => cb.checked = false);
 
-            // submit an empty POST to clear persisted selections server-side
             const form = document.createElement('form');
             form.method = 'POST';
-            // prefer explicit dataset action, fall back to the existing ingredients form action or current URL
             const parentForm = document.getElementById('ingredients-form');
             form.action = ingredientClearButton.datasetAction || (parentForm ? parentForm.action : window.location.href);
 
@@ -160,7 +202,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const saveButton = document.querySelector(".save-recipe-button");
     if (saveButton) {
         saveButton.addEventListener("click", function () {
-            // read recipe name from data attribute and URL-encode it for safe inclusion in path
             const rawName = saveButton.dataset ? saveButton.dataset.recipeName : saveButton.getAttribute('data-recipe-name');
             if (!rawName) {
                 console.error('Save button missing data-recipe-name');
@@ -168,7 +209,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             const recipeName = encodeURIComponent(rawName);
 
-            // prepare headers; include CSRF token header if available
             const headers = {
                 'Content-Type': 'application/json'
             };
@@ -185,14 +225,48 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 if (data.saved) {
                     saveButton.classList.add("saved");
-                    saveButton.innerText = "Unsave";
+                    saveButton.innerText = "Unsave Recipe";
+                    saveButton.setAttribute('aria-pressed', 'true');
+                    if (typeof addSuccessToast === 'function') addSuccessToast('Recipe saved');
                 } else {
                     saveButton.classList.remove("saved");
                     saveButton.innerText = "Save Recipe";
-                    window.location.href = `/recipes/${data.recipe_name}`;
+                    saveButton.setAttribute('aria-pressed', 'false');
+                    if (typeof addSuccessToast === 'function') addSuccessToast('Recipe removed from saved recipes');
+                    // Keep existing redirect behaviour (if server expects it), after UI update
+                    if (data.recipe_name) {
+                        window.location.href = `/recipes/${data.recipe_name}`;
+                    }
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                if (typeof addSuccessToast === 'function') addSuccessToast('Error saving recipe');
+            });
         });
     }
+    const addSuccessToast = (message) => {
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) existingToast.remove();
+
+        const toast = document.createElement('div');
+        toast.className = 'toast success-toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        const removeToast = () => {
+            if (toast && toast.parentNode) {
+                toast.remove();
+            }
+        };
+
+        const fadeDuration = 300; // keep in sync with CSS transition
+
+        setTimeout(() => {
+            toast.classList.add('fade-out');
+            toast.addEventListener('transitionend', removeToast, { once: true });
+            // Safety removal in case transitionend doesn't fire
+            setTimeout(removeToast, fadeDuration + 200);
+        }, 3000);
+    };
 });
