@@ -4,34 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (downloadGroceryButton) {
         downloadGroceryButton.addEventListener('click', function() {
             console.log('Downloading grocery list as TXT file');
-
-            fetch('/shopping/api/download', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return res.json();
-            })
-            .then(data => {
-                const blob = new Blob([data.shopping_list], { type: 'text/plain' });
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'grocery_list.txt');
-                document.body.appendChild(link);
-                link.click();
-                window.URL.revokeObjectURL(url);
-                link.parentNode.removeChild(link);
-            })
-            .catch(error => {
-                console.error('Error downloading grocery list:', error);
-                alert('Error downloading grocery list. Please try again.');
-            });
             fetch('/shopping/api/download', {
                 method: 'GET',
                 headers: {
