@@ -23,8 +23,6 @@ def add_user(username: str, email: str, password_hash: str, repo: AbstractReposi
     if not username or not isinstance(username, str) or username.strip() == "":
         raise ValueError("username is required")
 
-    print(username, email, password_hash)
-
     username_clean = username.strip()
     email_clean = email.strip()
 
@@ -40,8 +38,6 @@ def add_user(username: str, email: str, password_hash: str, repo: AbstractReposi
         username=username_clean, email=email_clean, password_hash=password_hash
     )
     repo.add_user(new_user)
-
-    print(new_user)
 
     return new_user
 

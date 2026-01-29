@@ -17,13 +17,17 @@ shopping_bp = Blueprint("shopping", __name__)
 @shopping_bp.route("/shopping")
 @login_required
 def shopping():
+    """
+    Renders the shopping list page for the logged-in user.
+    :return:
+    Rendered shopping list template with grocery items and saved recipes.
+    """
     repo = _repo()
     username = session.get("username")
     user = repo.get_user_by_username(username)
 
     grocery_list = user.grocery_list if user else []
 
-    print(user.recipe_ingredients)
     # Pass the variable name expected by the template
     return render_template(
         "pages/shopping/shopping.html",
@@ -36,6 +40,19 @@ def shopping():
 @shopping_bp.route("/shopping/api/remove/<string:name>", methods=["POST"])
 @login_required
 def remove_from_shopping_api(name: str):
+
+    """
+    Removes an ingredient from the user's grocery list.
+    :param name:
+    :return:
+    JSON response indicating success or failure of the removal operation.
+    {
+        success: bool,
+        message: str,
+        name: str
+    }
+    """
+
     from flask import jsonify
 
     repo = _repo()
@@ -67,6 +84,16 @@ def remove_from_shopping_api(name: str):
 @shopping_bp.route("/shopping/api/download", methods=["GET"])
 @login_required
 def download_shopping_list_api():
+
+    """
+    Generates and returns the user's shopping list as a downloadable text file.
+    :return:
+    JSON response containing the shopping list text.
+    {
+        "shopping_list": str
+    }
+    """
+
     from flask import jsonify
 
     repo = _repo()
@@ -75,9 +102,17 @@ def download_shopping_list_api():
 
     grocery_list = user.grocery_list if user else []
 
-    shopping_list_text = "Grocery List:\n\n"
+    shopping_list_text = "General Grocery List:\n\n"
     for item in grocery_list:
-        shopping_list_text += f"- {item.name}: {item.quantity} {item.unit}\n"
+        shopping_list_text += f"    - {item.name}: {item.quantity} {item.unit}\n"
+
+    user_saved_recipes = user.saved_recipes
+    user_recipe_ingredients = user.recipe_ingredients
+
+    for recipe in user_saved_recipes:
+        shopping_list_text += f"\n\n{recipe.name}:\n\n"
+        for ingredient_tuple in user_recipe_ingredients[recipe.name.lower()]:
+            shopping_list_text += f"    - {ingredient_tuple[2]}: {ingredient_tuple[0]} {ingredient_tuple[1]}\n"
 
     return jsonify({"shopping_list": shopping_list_text}), 200
 
@@ -85,6 +120,19 @@ def download_shopping_list_api():
 @shopping_bp.route("/shopping/api/delete_recipe/<string:recipe_name>", methods=["GET", "POST"])
 @login_required
 def delete_recipe_from_shopping_api(recipe_name: str):
+
+    """
+    Deletes a saved recipe and its associated ingredients from the user's grocery list.
+    :param recipe_name:
+    :return:
+    JSON response indicating success or failure of the deletion operation.
+    {
+        success: bool,
+        message: str,
+        recipe_name: str
+    }
+    """
+
     from flask import jsonify
 
     repo = _repo()
@@ -123,6 +171,21 @@ def delete_recipe_from_shopping_api(recipe_name: str):
 @shopping_bp.route("/shopping/api/remove_saved_recipe_ingredient/<string:recipe_name>/<string:ingredient_name>", methods=["POST"])
 @login_required
 def remove_saved_recipe_ingredient_api(recipe_name: str, ingredient_name: str):
+
+    """
+    Removes a specific ingredient associated with a saved recipe from the user's grocery list.
+    :param recipe_name:
+    :param ingredient_name:
+    :return:
+    JSON response indicating success or failure of the removal operation.
+    {
+        success: bool,
+        message: str,
+        ingredient_name: str,
+        recipe_name: str
+    }
+    """
+
     from flask import jsonify
 
     repo = _repo()

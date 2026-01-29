@@ -64,12 +64,6 @@ def recipe_detail(recipe_name):
     if not selected_ingredients and user_ingredients:
         selected_ingredients = [ingredient[2] for ingredient in user_ingredients]
 
-    print(
-        selected_ingredients,
-        repo.get_user_by_username(username).recipe_ingredients,
-        repo.get_user_by_username(username).saved_recipes,
-    )
-
     return render_template(
         "pages/recipes/recipe-detail.html",
         recipe=recipe,

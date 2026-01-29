@@ -571,3 +571,50 @@ body.scroll-locked {
         flex: 1;
     }
 }
+
+/* Toast styles (matched to inventory.css) */
+.toast{
+    position: fixed;
+    top: 30px;
+    left: 10px;
+    z-index: 2000;
+    padding: 12px 16px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    color: #0f172a;
+    background: #e8f7ef;
+    border: 1px solid #b6e3c5;
+    font-weight: 600;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms ease, transform 300ms ease, visibility 300ms ease;
+    visibility: visible;
+}
+
+.toast.success-toast {
+    background: var(--toast-bg, #e8f7ef);
+    border-color: #b6e3c5;
+    color: var(--toast-text-color, #0f172a);
+}
+
+.toast.error-toast {
+    /* keep a visible error variant that mirrors success contrast */
+    background: #fdecea;
+    border-color: #f4c2c0;
+    color: #3b0b0b;
+}
+
+.toast.fade-out {
+    opacity: 0;
+    transform: translateY(-8px);
+    visibility: hidden;
+}
+
+/* keep mobile placement consistent with inventory */
+@media (max-width: 680px) {
+    .toast {
+        left: 10px;
+        right: 10px;
+        top: 20px;
+    }
+}
