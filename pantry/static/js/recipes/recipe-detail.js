@@ -101,13 +101,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 return `${qty};;${unit};;${name}`;
             });
 
-            // --- AJAX submission instead of creating & submitting a form ---
-            // build FormData that mimics the previous form inputs (ingredients[])
+            // --- AJAX submission  ---
             const formAction = ingredientSubmitButton.datasetAction || window.location.href;
             const fd = new FormData();
             ingredients.forEach(value => fd.append('ingredients[]', value));
 
-            // include an explicit flag so server can detect AJAX submission (optional)
             fd.append('ajax', '1');
 
             // disable button while in-flight
@@ -131,7 +129,6 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(res => {
                 if (!res.ok) throw res;
-                // try to parse JSON; if server returns HTML we'll treat as success but won't parse
                 const ct = res.headers.get('content-type') || '';
                 if (ct.includes('application/json')) return res.json();
                 return Promise.resolve({ ok: true });
@@ -177,17 +174,14 @@ document.addEventListener("DOMContentLoaded", function() {
             // visually uncheck all boxes
             const checkedBoxes = document.querySelectorAll(".ingredient-check:checked");
 
-            // collect checked checkboxes
             if (checkedBoxes.length === 0) {
                 return; // nothing to submit
             }
 
             checkedBoxes.forEach(cb => cb.checked = false);
 
-            // submit an empty POST to clear persisted selections server-side
             const form = document.createElement('form');
             form.method = 'POST';
-            // prefer explicit dataset action, fall back to the existing ingredients form action or current URL
             const parentForm = document.getElementById('ingredients-form');
             form.action = ingredientClearButton.datasetAction || (parentForm ? parentForm.action : window.location.href);
 
@@ -208,7 +202,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const saveButton = document.querySelector(".save-recipe-button");
     if (saveButton) {
         saveButton.addEventListener("click", function () {
-            // read recipe name from data attribute and URL-encode it for safe inclusion in path
             const rawName = saveButton.dataset ? saveButton.dataset.recipeName : saveButton.getAttribute('data-recipe-name');
             if (!rawName) {
                 console.error('Save button missing data-recipe-name');
@@ -216,7 +209,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             const recipeName = encodeURIComponent(rawName);
 
-            // prepare headers; include CSRF token header if available
             const headers = {
                 'Content-Type': 'application/json'
             };
@@ -231,7 +223,6 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => response.json())
             .then(data => {
-                // Update UI text and attributes to exactly match template wording
                 if (data.saved) {
                     saveButton.classList.add("saved");
                     saveButton.innerText = "Unsave Recipe";
