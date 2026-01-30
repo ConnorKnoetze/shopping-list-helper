@@ -57,6 +57,7 @@ html {
 }
 
 body {
+    background: var(--gradient-primary);
     background-color: var(--color-bg);
     margin: 0;
     color: var(--color-text);
