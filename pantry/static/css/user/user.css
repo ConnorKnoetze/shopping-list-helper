@@ -1,0 +1,338 @@
+.page-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    gap: 20px;
+}
+
+/* General Page Items */
+
+.page-panel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    padding: 10px;
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.page-panel:hover{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.panel-title:before{
+    content: " ";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #e67633;
+    margin: 0 10px 5px 10px;
+    border-radius: 50%;
+}
+
+.panel-title{
+    align-self: start;
+    font-size: 24px;
+    margin-bottom: 25px;
+}
+
+/* User Panel Items */
+
+.user-info-title:after{
+    content: "Information";
+    color: #e67633;
+    font-weight: bolder;
+}
+
+.default-pfp-container{
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    margin-bottom: 20px;
+    text-shadow: #000 0 2px 10px;
+    font-size: 2rem;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.default-pfp-container:hover{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.pre-text:before{
+    font-weight: lighter;
+    color: var(--color-text);
+}
+
+.username:before{
+    content: "Username:";
+}
+
+.email:before{
+    content: "Email:";
+}
+
+.user-info-item{
+    text-align: center;
+    width: 90%;
+    font-size: 1.5rem;
+    margin: 0;
+    padding: 0.75em 0;
+    box-sizing: border-box;
+    border-bottom: 2px solid var(--color-border);
+    color: #e67633;
+    font-weight: bold;
+}
+
+.user-info-item:last-child{
+    border-bottom: none;
+}
+
+.saved-recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: start;
+    justify-content: center;
+    grid-auto-rows: auto;
+    padding: 0;
+}
+
+.saved-recipes-grid > .saved-recipe-item:only-child {
+    max-width: 900px;
+    justify-self: center;
+}
+
+.saved-recipe-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background-color: var(--recipe-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: filter 0.3s ease, transform 0.3s ease;
+    min-height: 16rem;
+    color: var(--color-text);
+}
+
+.saved-recipe-item:hover{
+    cursor: pointer;
+    filter: drop-shadow(#000 0 2px 4px);
+    transform: translateY(-2.5px);
+}
+
+.saved-recipe-image {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+}
+
+.saved-recipe-body {
+    padding: 0.65rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    color: var(--color-text);
+    flex: 1 1 auto;
+}
+
+.saved-recipe-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    color: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.saved-recipe-meta {
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--color-text) 70%, transparent 30%);
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.saved-recipe-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+    align-items: center;
+}
+
+.saved-recipe-top-actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 6px;
+    z-index: 5;
+}
+
+.saved-recipe-item a,
+.saved-recipe-item button {
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    cursor: pointer;
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.saved-recipe-image[alt=""] {
+    background: linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0.06));
+}
+
+@media (max-width: 900px) {
+    .saved-recipe-image { height: 130px; }
+    .saved-recipe-item { min-height: 14rem; }
+}
+
+@media (max-width: 600px) {
+    .saved-recipes-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 0.6rem;
+    }
+    .saved-recipe-image { height: 110px; }
+    .saved-recipe-body { padding: 0.5rem; }
+    .saved-recipe-title { font-size: 0.95rem; }
+    .saved-recipe-meta { font-size: 0.85rem; }
+    .saved-recipe-item { min-height: 12rem; border-radius: 8px; }
+}
+
+/* Shopping List Section */
+
+.shopping-list-preview-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    background-color: var(--recipe-card-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.shopping-list-title:after {
+    content: "List";
+    color: #e67633;
+    font-weight: bolder;
+}
+
+
+/* Responsive Design */
+@media (min-width: 1200px) {
+  .page-panel {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Tablet and small laptop */
+@media (max-width: 1024px) {
+  .page-panel {
+    width: 95%;
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .panel-title {
+    font-size: 20px;
+    margin-bottom: 18px;
+  }
+
+  .default-pfp-container {
+    width: 120px;
+    height: 120px;
+    font-size: 1.5rem;
+  }
+
+  .user-info-item {
+    width: 100%;
+    font-size: 1.25rem;
+    padding: 0.65em 0;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 600px) {
+    .page-container {
+        margin-top: 20px;
+        padding: 0 12px;
+    }
+
+    .page-panel{
+        padding: 10px;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        align-items: center;
+    }
+
+    .panel-title{
+        font-size: 18px;
+        margin-bottom: 14px;
+        text-align: center;
+    }
+
+    .panel-title:before{
+        margin: 0 8px 3px 0;
+    }
+
+    .panel-title:after{
+        margin-top: 6px;
+        font-size: 0.95em;
+    }
+
+    .default-pfp-container{
+        width: 100px;
+        height: 100px;
+        font-size: 1.25rem;
+        margin-bottom: 14px;
+    }
+
+    .user-info-item{
+        text-align: left;
+        width: 100%;
+        font-size: 1.1rem;
+        padding: 0.75em 12px;
+    }
+
+    .user-info-item:last-child{
+        border-bottom: none;
+    }
+}
+
+/* Small accessibility tweak: slightly larger touch targets */
+.user-info-item {
+    transition: background-color 0.15s ease, transform 0.12s ease;
+}
+.user-info-item:active {
+    transform: translateY(1px);
+}
