@@ -9,6 +9,7 @@ from pantry.blueprints.home.home import home_bp
 from pantry.blueprints.inventory.inventory import inventory_bp
 from pantry.blueprints.recipes.recipes import recipes_bp
 from pantry.blueprints.shopping.shopping import shopping_bp
+from pantry.blueprints.user.user import user_bp
 from pantry.utilities.auth import get_current_user
 
 from pantry.blueprints.services import _repo
@@ -34,6 +35,7 @@ def create_app():
     app.register_blueprint(inventory_bp)
     app.register_blueprint(recipes_bp)
     app.register_blueprint(shopping_bp)
+    app.register_blueprint(user_bp)
 
     @app.context_processor
     def inject_user():

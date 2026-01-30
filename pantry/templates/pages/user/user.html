@@ -1,0 +1,50 @@
+{% extends 'pages/authenticated.html' %}
+
+{% block extra_css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user/user.css')}}">
+    <script defer src="{{ url_for('static', filename='js/user/user.js') }}"></script>
+{% endblock %}
+
+{% block main %}
+    <div class="page-container">
+
+        <div class="page-panel user-info-panel">
+            <h2 class="panel-title user-info-title">User </h2>
+            <div class="default-pfp-container">
+                <h1>{{ username_shorthand }}</h1>
+            </div>
+            <p class="user-info-item pre-text username"> {{ user.username }}</p>
+            <p class="user-info-item pre-text email"> {{ user.email }}</p>
+        </div>
+
+        <div class="page-panel saved-recipes-preview-card">
+            <h2 class="panel-title saved-recipes-title">Saved </h2>
+            <div class="saved-recipes-grid">
+                {% for recipe in user.saved_recipes %}
+                    <div class="saved-recipe-item" id="{{ recipe.name.lower().replace(' ', '-') }}">
+                        <img src="/static/images/recipes/{{ recipe.image_url }}" alt="{{ recipe.name }}" class="saved-recipe-image">
+                        <a href=" /recipes/{{ recipe.name.lower().replace(' ', '-') }}">
+                            <h3 class="saved-recipe-title">{{ recipe.name }}</h3>
+                        </a>
+                    </div>
+                {% else %}
+                    <p class="no-saved-recipes-message">No saved recipes.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="page-panel shopping-list-preview-card">
+            <h2 class="panel-title shopping-list-title">Shopping </h2>
+            {% for item in user.grocery_list%}
+                <div class="shopping-list-item">
+                    <p class="shopping-list-item-name">{{ item.name }}</p>
+                </div>
+            {% else %}
+                <p class="no-shopping-list-items-message">No items in shopping list.</p>
+            {% endfor %}
+
+        </div>
+
+    </div>
+{% endblock %}
