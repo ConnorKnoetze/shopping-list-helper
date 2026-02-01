@@ -38,7 +38,7 @@
                             <div class="saved-recipe-card" id="{{ recipe.name }}">
                                 <h3 class="saved-recipe-name">{{ recipe.name }}</h3>
                                 <ul class="ingredients-list">
-                                    {% for ingredient in recipe_ingredients[recipe.name.lower()] %}
+                                    {% for ingredient in recipe_ingredients.get(recipe.name.lower(), []) %}
                                         <li id="{{ ingredient[2] }}">
                                             <div class="per-recipe-ingredient-row">
                                                 <span class="ingredient-name">

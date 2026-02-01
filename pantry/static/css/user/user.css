@@ -113,6 +113,19 @@
     padding: 0;
 }
 
+.saved-recipes-title:after {
+    content: "Recipes";
+    color: #e67633;
+    font-weight: bolder;
+}
+
+.no-saved-recipes-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--color-text);
+    margin-top: 20px;
+}
+
 .saved-recipes-grid > .saved-recipe-item:only-child {
     max-width: 900px;
     justify-self: center;
@@ -147,15 +160,6 @@
     flex-shrink: 0;
 }
 
-.saved-recipe-body {
-    padding: 0.65rem 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-    color: var(--color-text);
-    flex: 1 1 auto;
-}
-
 .saved-recipe-title {
     font-size: 1rem;
     font-weight: 700;
@@ -164,31 +168,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.saved-recipe-meta {
-    font-size: 0.9rem;
-    color: color-mix(in srgb, var(--color-text) 70%, transparent 30%);
-    line-height: 1.2;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.saved-recipe-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: auto;
-    align-items: center;
-}
-
-.saved-recipe-top-actions {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    display: flex;
-    gap: 6px;
-    z-index: 5;
 }
 
 .saved-recipe-item a,
@@ -243,6 +222,13 @@
     content: "List";
     color: #e67633;
     font-weight: bolder;
+}
+
+.no-shopping-list-items-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--color-text);
+    margin-top: 10px;
 }
 
 

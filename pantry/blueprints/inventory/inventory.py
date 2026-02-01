@@ -99,11 +99,9 @@ def update_inventory(name: str):
         if data is None:
             return jsonify({"success": False, "message": "Invalid JSON data"}), 400
 
-        # Validate quantity and unit explicitly to provide precise error messages
         raw_quantity = data.get("quantity", None)
         unit = data.get("unit", "")
 
-        # Quantity must be provided and numeric
         try:
             quantity = int(raw_quantity)
         except (TypeError, ValueError):
@@ -111,7 +109,6 @@ def update_inventory(name: str):
                 {"success": False, "message": "Quantity must be a number"}
             ), 400
 
-        # Quantity must not be negative
         if quantity < 0:
             return jsonify(
                 {"success": False, "message": "Quantity cannot be negative"}
@@ -125,7 +122,6 @@ def update_inventory(name: str):
         if not ingredient:
             return jsonify({"success": False, "message": "Ingredient not found"}), 404
 
-        # Validate unit matches ingredient.unit
         if unit and unit != ingredient.unit:
             return jsonify({"success": False, "message": "Invalid unit"}), 400
 

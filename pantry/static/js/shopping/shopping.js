@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const itemName = this.name;
             console.log('Removing item from grocery list:', itemName);
 
-            fetch(`/shopping/api/remove/${itemName}`, {
+            fetch(`/shopping/api/remove/${encodeURIComponent(itemName)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const recipeName = this.name;
             console.log('Deleting saved recipe with Name:', recipeName);
 
-            fetch(`/shopping/api/delete_recipe/${recipeName}`, {
+            fetch(`/shopping/api/delete_recipe/${encodeURIComponent(recipeName)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const ingredientName = this.name.split("::")[1];
             console.log('Removing ingredient from saved recipe:', ingredientName, 'from recipe:', recipeName);
 
-            fetch(`/shopping/api/remove_saved_recipe_ingredient/${recipeName}/${ingredientName}`, {
+            fetch(`/shopping/api/remove_saved_recipe_ingredient/${encodeURIComponent(recipeName)}/${encodeURIComponent(ingredientName)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -148,7 +148,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Server response:', response);
 
                 if (response.success) {
-                    const ingredientElement = document.getElementById(`${ingredientName}`);
+                    // remove the list item containing the clicked button instead of relying on element id
+                    const btn = this;
+                    const ingredientElement = btn && btn.closest ? btn.closest('li') : document.getElementById(`${ingredientName}`);
                     if (ingredientElement) {
                         ingredientElement.remove();
 

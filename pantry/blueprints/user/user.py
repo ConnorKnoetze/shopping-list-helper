@@ -25,8 +25,13 @@ def user_profile(username: str):
     if not user:
         return render_template("errors/404.html"), 404
 
+    all_recipes = repo.get_all_recipes()
+    recipe_map = {r.id: r for r in all_recipes}
+    saved_recipes = [recipe_map[rid] for rid in user.saved_recipes if rid in recipe_map]
+
     return render_template(
         "pages/user/user.html",
         user=user,
-        username_shorthand= user.username[0].upper(),
+        saved_recipes=saved_recipes,
+        username_shorthand=user.username[0].upper(),
     )
