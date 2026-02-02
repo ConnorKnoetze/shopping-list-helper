@@ -21,7 +21,7 @@
         <div class="page-panel saved-recipes-preview-card">
             <h2 class="panel-title saved-recipes-title">Saved </h2>
             <div class="saved-recipes-grid">
-                {% for recipe in user.saved_recipes %}
+                {% for recipe in saved_recipes %}
                     <div class="saved-recipe-item" id="{{ recipe.name.lower().replace(' ', '-') }}">
                         <img src="/static/images/recipes/{{ recipe.image_url }}" alt="{{ recipe.name }}" class="saved-recipe-image">
                         <a href=" /recipes/{{ recipe.name.lower().replace(' ', '-') }}">

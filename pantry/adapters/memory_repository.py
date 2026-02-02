@@ -93,13 +93,16 @@ class MemoryRepository(AbstractRepository):
         return user.saved_recipes
 
     def add_saved_recipe(self, recipe, user):
-        user.save_recipe(recipe)
+        recipe_id = recipe.id if hasattr(recipe, 'id') else recipe
+        user.save_recipe(recipe_id)
 
     def user_has_saved_recipe(self, recipe, user):
-        return recipe in user.saved_recipes
+        recipe_id = recipe.id if hasattr(recipe, 'id') else recipe
+        return recipe_id in user.saved_recipes
 
     def remove_saved_recipe(self, recipe, user):
-        user.remove_saved_recipe(recipe)
+        recipe_id = recipe.id if hasattr(recipe, 'id') else recipe
+        user.remove_saved_recipe(recipe_id)
 
     def get_user_recipe_ingredients_by_recipe_name(self, user, recipe_name):
         return user.recipe_ingredients.get(recipe_name, [])

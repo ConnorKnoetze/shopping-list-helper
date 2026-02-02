@@ -64,12 +64,14 @@ def recipe_detail(recipe_name):
     if not selected_ingredients and user_ingredients:
         selected_ingredients = [ingredient[2] for ingredient in user_ingredients]
 
+    saved_flag = repo.user_has_saved_recipe(recipe, user)
+
     return render_template(
         "pages/recipes/recipe-detail.html",
         recipe=recipe,
         ingredients=recipe.ingredients,
         selected_ingredients=selected_ingredients,
-        saved=recipe in user.saved_recipes,
+        saved=saved_flag,
     )
 
 
