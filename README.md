@@ -4,7 +4,7 @@ A web app that streamlines shopping list creation and weekly menu item selection
 
 This repository contains a Flask-based single-application web project that provides user authentication, inventory management, recipe browsing, and shopping list generation/export functionality.
 
-Currently deployed with Railway as a subdomain of my domain "connorknoetze.com". For the best free tier performance I have chosen integrate a PostgreSQL database with Railway. Sadly moving away from Supabase but the lack of deployment region overlap forced the decision due to high transfer latency.
+Currently deployed with Railway as a subdomain of my domain "connorknoetze.com". For the best free tier performance I have chosen to integrate a PostgreSQL database with Railway. Sadly moving away from Supabase but the lack of deployment region overlap forced the decision due to high transfer latency.
 
 Repository: https://github.com/ConnorKnoetze/shopping-list-helper
 
