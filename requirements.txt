@@ -4,6 +4,7 @@ password-validator==1.0
 wtforms==3.2.1
 Flask-WTF==1.2.2
 SQLAlchemy~=2.0.33
+gunicorn>=20.1.0
 
 # Testing
 pytest>=7.0.0
