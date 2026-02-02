@@ -1,5 +1,7 @@
 from dotenv import load_dotenv
 from flask import render_template
+from sqlalchemy import create_engine, NullPool, inspect
+from sqlalchemy.orm import sessionmaker, clear_mappers
 
 from pantry.adapters import repository
 from pantry.adapters.memory_repository import MemoryRepository
@@ -14,6 +16,8 @@ from pantry.utilities.auth import get_current_user
 
 from pantry.blueprints.services import _repo
 
+from pantry.adapters.database_repository import SqlAlchemyRepository
+
 def create_app():
     from flask import Flask
 
@@ -22,13 +26,47 @@ def create_app():
     app.config.from_object("config.Config")
 
     if app.config["REPOSITORY"] == "memory":
-        # Create the MemoryRepository implementation for a memory-based repository.
         repository.repo_instance = MemoryRepository()
         populate(_repo())
 
-    # @app.errorhandler(404)
-    # def page_not_found(error):
-    #     return render_template("/pages/errors/404.html"), 404
+    elif app.config["REPOSITORY"] == "database":
+        database_uri = app.config["SQLALCHEMY_DATABASE_URI"]
+
+        database_echo = app.config["SQLALCHEMY_ECHO"]
+        if database_uri.startswith("sqlite"):
+            database_engine = create_engine(
+                database_uri,
+                connect_args={"check_same_thread": False},
+                poolclass=NullPool,
+                echo=database_echo,
+            )
+        else:
+            database_engine = create_engine(
+                database_uri,
+                pool_size=5,
+                max_overflow=10,
+                pool_pre_ping=True,
+                echo=database_echo,
+            )
+
+        session_factory = sessionmaker(
+            autocommit=False, autoflush=True, bind=database_engine
+        )
+
+        inspector = inspect(database_engine)
+
+        clear_mappers()
+        from pantry.adapters import orm as orm
+
+        if len(inspector.get_table_names()) == 0:
+            print("No tables found — creating tables and populating database...")
+            orm.Base.metadata.create_all(database_engine)
+            repository.repo_instance = SqlAlchemyRepository(session_factory, database_uri)
+            database_mode = True
+            populate(repository.repo_instance, database_mode)
+        else:
+            print("Tables found")
+            repository.repo_instance = SqlAlchemyRepository(session_factory, database_uri)
 
     app.register_blueprint(home_bp)
     app.register_blueprint(authentication_blueprint)

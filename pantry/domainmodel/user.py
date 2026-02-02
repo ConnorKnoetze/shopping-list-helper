@@ -14,7 +14,7 @@ class User:
         self.__email = email
         self.__password_hash = password_hash
         self.__grocery_list: List[Ingredient] = []
-        self.__recipe_ingredients: Dict[str : List[str]] = {}
+        self.__recipe_ingredients: Dict[str, List[str]] = {}
         self.__saved_recipes: List[int] = []
 
     def __repr__(self):
@@ -63,55 +63,83 @@ class User:
         self.__grocery_list = [ing for ing in self.__grocery_list if ing != item]
 
     @property
-    def recipe_ingredients(self) -> dict[Any]:
+    def recipe_ingredients(self) -> Dict[str, List[str]]:
         return self.__recipe_ingredients
 
     def add_recipe_ingredient(self, recipe_name, ingredient_string: str) -> None:
-        if recipe_name not in self.__recipe_ingredients:
-            self.__recipe_ingredients[recipe_name] = []
-        if ingredient_string not in self.__recipe_ingredients[recipe_name]:
-            self.__recipe_ingredients[recipe_name].append(ingredient_string)
+        found_key = None
+        for k in self.__recipe_ingredients.keys():
+            if k.lower() == recipe_name.lower():
+                found_key = k
+                break
+        if not found_key:
+            found_key = recipe_name
+            self.__recipe_ingredients[found_key] = []
+
+        if isinstance(ingredient_string, (list, tuple)) and len(ingredient_string) > 0:
+            disp = str(ingredient_string[2]) if len(ingredient_string) > 2 else str(ingredient_string[-1])
+        else:
+            disp = str(ingredient_string)
+        disp_l = disp.lower()
+
+        for existing in self.__recipe_ingredients[found_key]:
+            if isinstance(existing, (list, tuple)):
+                name = existing[2] if len(existing) > 2 else str(existing[-1])
+            else:
+                name = str(existing)
+            if name.lower() == disp_l:
+                return
+
+        self.__recipe_ingredients[found_key].append(ingredient_string)
 
     def remove_recipe_ingredient(self, recipe_name, ingredient_string: str) -> None:
-        lowered_name = recipe_name.lower()
-        if lowered_name in self.__recipe_ingredients:
-            self.__recipe_ingredients[lowered_name] = [
-                ing
-                for ing in self.__recipe_ingredients[lowered_name]
-                if ing[2] != ingredient_string
-            ]
-            if not self.__recipe_ingredients[lowered_name]:
-                del self.__recipe_ingredients[lowered_name]
+        found_key = None
+        for k in list(self.__recipe_ingredients.keys()):
+            if k.lower() == recipe_name.lower():
+                found_key = k
+                break
+        if not found_key:
+            return
+
+        target_l = str(ingredient_string).lower()
+        def _keep(ing):
+            if isinstance(ing, (list, tuple)) and len(ing) > 0:
+                name = existing_name = (ing[2] if len(ing) > 2 else str(ing[-1]))
+                return name.lower() != target_l
+            else:
+                return str(ing).lower() != target_l
+
+        self.__recipe_ingredients[found_key] = [ing for ing in self.__recipe_ingredients[found_key] if _keep(ing)]
+        if not self.__recipe_ingredients[found_key]:
+            del self.__recipe_ingredients[found_key]
 
     def add_multiple_recipe_ingredients(
         self, recipe_name, ingredient_strings: List[str]
     ) -> None:
-        if recipe_name not in self.__recipe_ingredients:
-            self.__recipe_ingredients[recipe_name] = []
         for string in ingredient_strings:
-            if string not in self.__recipe_ingredients[recipe_name]:
-                self.__recipe_ingredients[recipe_name].append(string)
+            self.add_recipe_ingredient(recipe_name, string)
 
     def remove_multiple_recipe_ingredients(
         self, recipe, ingredient_strings: List[str]
     ) -> None:
-        if recipe in self.__recipe_ingredients:
-            self.__recipe_ingredients[recipe] = [
-                ing
-                for ing in self.__recipe_ingredients[recipe]
-                if ing not in ingredient_strings
-            ]
-            if not self.__recipe_ingredients[recipe]:
-                del self.__recipe_ingredients[recipe]
+        found_key = None
+        for k in list(self.__recipe_ingredients.keys()):
+            if k.lower() == recipe.lower():
+                found_key = k
+                break
+        if not found_key:
+            return
+        for s in ingredient_strings:
+            self.remove_recipe_ingredient(recipe, s)
 
     def clear_recipe_ingredients_by_recipe(self, recipe_name) -> None:
-        if recipe_name in self.__recipe_ingredients:
-            del self.__recipe_ingredients[recipe_name]
+        for k in list(self.__recipe_ingredients.keys()):
+            if k.lower() == recipe_name.lower():
+                del self.__recipe_ingredients[k]
+                break
 
     def delete_recipe_ingredients_per_recipe(self, recipe_name):
-        lowered_name = recipe_name.lower()
-        if lowered_name in self.recipe_ingredients:
-            del self.recipe_ingredients[lowered_name]
+        self.clear_recipe_ingredients_by_recipe(recipe_name)
 
     def clear_all_recipe_ingredients(self) -> None:
         self.__recipe_ingredients = {}

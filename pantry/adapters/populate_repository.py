@@ -12,6 +12,9 @@ def populate(repo, database_mode: bool = False):
         print("populating ingredients...")
         repo.add_multiple_ingredients(data_reader.ingredients)
         print("done populating ingredients")
+        print("populating recipes...")
+        repo.add_multiple_recipes(data_reader.recipes)
+        print("done populating recipes")
     else:
         # Memory mode: simple population
         print("populating categories...")

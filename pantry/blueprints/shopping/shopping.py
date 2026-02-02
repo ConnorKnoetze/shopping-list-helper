@@ -28,12 +28,19 @@ def shopping():
 
     grocery_list = user.grocery_list if user else []
 
-    # Pass the variable name expected by the template
+    all_recipes = repo.get_all_recipes()
+    recipe_map = {r.id: r for r in all_recipes}
+    saved_recipes = [recipe_map[rid] for rid in (user.saved_recipes or []) if rid in recipe_map]
+
+    ri = {}
+    for k, v in (user.recipe_ingredients or {}).items():
+        ri[k.lower()] = v
+
     return render_template(
         "pages/shopping/shopping.html",
         grocery_items=grocery_list,
-        saved_recipes=user.saved_recipes,
-        recipe_ingredients=user.recipe_ingredients,
+        saved_recipes=saved_recipes,
+        recipe_ingredients=ri,
     )
 
 
@@ -59,10 +66,17 @@ def remove_from_shopping_api(name: str):
     username = session.get("username")
     user = repo.get_user_by_username(username)
 
-    ing = repo.get_ingredient_by_name(name)
+    found = None
+    for ing in list(user.grocery_list):
+        try:
+            if ing.name.lower() == name.lower():
+                found = ing
+                break
+        except Exception:
+            continue
 
-    if ing in user.grocery_list:
-        user.grocery_list.remove(ing)
+    if found:
+        user.grocery_list.remove(found)
         repo.update_user(user)
         return jsonify(
             {
@@ -85,13 +99,9 @@ def remove_from_shopping_api(name: str):
 @login_required
 def download_shopping_list_api():
 
-    """
-    Generates and returns the user's shopping list as a downloadable text file.
-    :return:
-    JSON response containing the shopping list text.
-    {
-        "shopping_list": str
-    }
+    """Generates and returns the user's shopping list as a downloadable text file.
+
+    Returns JSON containing the shopping list text.
     """
 
     from flask import jsonify
@@ -109,10 +119,21 @@ def download_shopping_list_api():
     user_saved_recipes = user.saved_recipes
     user_recipe_ingredients = user.recipe_ingredients
 
-    for recipe in user_saved_recipes:
-        shopping_list_text += f"\n\n{recipe.name}:\n\n"
-        for ingredient_tuple in user_recipe_ingredients[recipe.name.lower()]:
-            shopping_list_text += f"    - {ingredient_tuple[2]}: {ingredient_tuple[0]} {ingredient_tuple[1]}\n"
+    all_recipes = repo.get_all_recipes()
+    recipe_map = {r.id: r for r in all_recipes}
+
+    for recipe_id in user_saved_recipes:
+        recipe_obj = recipe_map.get(recipe_id)
+        if not recipe_obj:
+            continue
+        shopping_list_text += f"\n\n{recipe_obj.name}:\n\n"
+        ri_list = []
+        for k, v in (user_recipe_ingredients or {}).items():
+            if k.lower() == recipe_obj.name.lower():
+                ri_list = v
+                break
+        for ingr in ri_list:
+            shopping_list_text += f"    - {ingr[2]} {ingr[0]} {ingr[1]}\n"
 
     return jsonify({"shopping_list": shopping_list_text}), 200
 
@@ -139,18 +160,28 @@ def delete_recipe_from_shopping_api(recipe_name: str):
     username = session.get("username")
     user = repo.get_user_by_username(username)
 
-    recipe_to_delete = None
-    for recipe in user.saved_recipes:
-        if recipe.name == recipe_name:
-            recipe_to_delete = recipe
-            break
+    recipe_obj = repo.get_recipe_by_name(recipe_name)
+    if not recipe_obj:
+        return jsonify({"success": False, "message": f"Recipe '{recipe_name}' not found.", "recipe_name": recipe_name}), 404
 
-    if recipe_to_delete:
-        user.saved_recipes.remove(recipe_to_delete)
-        # Also remove associated ingredients from grocery list
-        for ingredient in recipe_to_delete.ingredients:
-            if ingredient in user.grocery_list:
-                user.grocery_list.remove(ingredient)
+    recipe_id = recipe_obj.id
+
+    if recipe_id in user.saved_recipes:
+        user.remove_saved_recipe(recipe_id)
+
+        for ingredient in recipe_obj.ingredients:
+            ing_name = ingredient[0] if isinstance(ingredient, (list, tuple)) and len(ingredient) > 0 else str(ingredient)
+            for g in list(user.grocery_list):
+                try:
+                    if g.name.lower() == str(ing_name).lower():
+                        user.grocery_list.remove(g)
+                except Exception:
+                    continue
+
+        keys_to_delete = [k for k in (user.recipe_ingredients or {}).keys() if k.lower() == recipe_name.lower()]
+        for k in keys_to_delete:
+            del user.recipe_ingredients[k]
+
         repo.update_user(user)
         return jsonify(
             {
@@ -167,6 +198,7 @@ def delete_recipe_from_shopping_api(recipe_name: str):
                 "recipe_name": recipe_name,
             }
         ), 404
+
 
 @shopping_bp.route("/shopping/api/remove_saved_recipe_ingredient/<string:recipe_name>/<string:ingredient_name>", methods=["POST"])
 @login_required
@@ -194,6 +226,12 @@ def remove_saved_recipe_ingredient_api(recipe_name: str, ingredient_name: str):
 
     try:
         user.remove_recipe_ingredient(recipe_name, ingredient_name)
+        for g in list(user.grocery_list):
+            try:
+                if g.name.lower() == ingredient_name.lower():
+                    user.grocery_list.remove(g)
+            except Exception:
+                continue
     except Exception as e:
         return jsonify(
             {
