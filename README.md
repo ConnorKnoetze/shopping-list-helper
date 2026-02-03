@@ -1,6 +1,6 @@
 # Shopping List Helper
 
-A web app that streamlines shopping list creation and weekly menu item selection. (Under Development)
+A web app that streamlines shopping list creation and weekly menu item selection.
 
 This repository contains a Flask-based single-application web project that provides user authentication, inventory management, recipe browsing, and shopping list generation/export functionality.
 
