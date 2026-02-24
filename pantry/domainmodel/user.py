@@ -7,7 +7,7 @@ from pantry.domainmodel.ingredient import Ingredient
 
 class User:
     def __init__(
-        self, user_id: int, username: str, email: str, password_hash: str = None
+        self, user_id: int, username: str, email: str, password_hash: str = None, admin: bool = False
     ):
         self.__user_id = user_id
         self.__username = username
@@ -16,6 +16,7 @@ class User:
         self.__grocery_list: List[Ingredient] = []
         self.__recipe_ingredients: Dict[str, List[str]] = {}
         self.__saved_recipes: List[int] = []
+        self.__admin = admin
 
     def __repr__(self):
         return f"User(user_id={self.id}, username='{self.username}', email='{self.email}', grocery_list={self.grocery_list}')"
@@ -154,3 +155,7 @@ class User:
 
     def remove_saved_recipe(self, recipe_id: int):
         self.__saved_recipes = [rid for rid in self.__saved_recipes if rid != recipe_id]
+
+    @property
+    def admin(self):
+        return self.__admin

@@ -80,11 +80,12 @@ class SqlAlchemyRepository(AbstractRepository):
             pass
         # attach categories if present
         if getattr(ingredient, "categories", None):
-            for cat in ingredient.categories:
-                cat_model = self._orm.ensure_category(session, cat if isinstance(cat, str) else cat.name)
-                if cat_model not in ingr_model.categories:
-                    ingr_model.categories.append(cat_model)
+            cat = ",".join([str(cate) for cate in ingredient.categories])
+            cat_model = self._orm.ensure_category(session, cat if isinstance(cat, str) else cat.name)
+            if cat_model not in ingr_model.categories:
+                ingr_model.categories.append(cat_model)
         self._session_cm.commit()
+        return ingredient
 
     def add_multiple_ingredients(self, ingredients: List):
         for ing in ingredients:

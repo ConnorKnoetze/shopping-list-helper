@@ -24,5 +24,33 @@
     </section>
 
     <div class="ingredient-page-container hidden"></div>
+    {% if admin %}
+    <div class="create-ingredient-container hidden">
+        <div class="create-ingredient-card">
+            <h1 class="create-ingredient-title">Create New Ingredient</h1>
+            <form id="create-ingredient-form">
+                <label>
+                    <input type="text" name="name" placeholder="Ingredient Name" required>
+                </label>
+                <label>
+                    <input type="text" name="unit" placeholder="Unit (e.g., g, cups)" required>
+                </label>
+                <label>
+                    <input type="text" name="category" placeholder="Category (e.g., Dairy, Produce)" required>
+                </label>
+                <label>
+                    <input type="text" name="range-min" placeholder="Range-min" required>
+                </label>
+                <label>
+                    <input type="text" name="range-max" placeholder="Range-max" required>
+                </label>
+                <label>
+                    <input type="text" name="step" placeholder="Quantity step" required>
+                </label>
+                <button type="submit">Create Ingredient</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
 
 {% endblock %}

@@ -184,4 +184,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     })
 
+    // admin add ingredient form
+    const addIngredientForm = document.getElementById('create-ingredient-form');
+    if (addIngredientForm) {
+        addIngredientForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(addIngredientForm);
+            const payload = {};
+            formData.forEach((value, key) => {
+                payload[key] = value;
+            });
+
+            fetch('/inventory/api/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(response => {
+                if (response.success) {
+                    alert('Ingredient created successfully!');
+                    addIngredientForm.reset();
+                } else {
+                    alert(`Error: ${response.message || 'Failed to create ingredient'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error creating ingredient:', error);
+                alert('Error creating ingredient. Please try again.');
+            });
+        });
+    }
+
 });

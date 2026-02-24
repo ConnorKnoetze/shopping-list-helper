@@ -8,6 +8,7 @@ from sqlalchemy import (
     Table,
     JSON,
     create_engine,
+    Boolean,
 )
 from sqlalchemy.orm import relationship, declarative_base, Session
 from sqlalchemy.orm import sessionmaker
@@ -168,8 +169,10 @@ class UserModel(Base):
         "UserSavedRecipe", cascade="all, delete-orphan", backref="user"
     )
 
+    admin = Column(Boolean, nullable=False, default=False)
+
     def to_domain(self) -> User:
-        u = User(self.id, self.username, self.email, self.password_hash)
+        u = User(self.id, self.username, self.email, self.password_hash, admin=self.admin)
         # grocery list -> produce Ingredient domain objects with stored quantity
         for assoc in self.grocery_assocs:
             ingr = assoc.ingredient.to_domain(quantity=assoc.quantity, unit="")
@@ -190,6 +193,8 @@ class UserModel(Base):
 def ensure_category(session: Session, name: str) -> CategoryModel:
     name = name.strip()
     obj = session.query(CategoryModel).filter_by(name=name).first()
+
+    print(name)
     if obj:
         return obj
     obj = CategoryModel(name=name)

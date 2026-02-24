@@ -64,6 +64,20 @@ def login_required(view):
 
     return wrapped_view
 
+def admin_required(view):
+    from functools import wraps
+
+    @wraps(view)
+    def wrapped_view(**kwargs):
+        if not is_logged_in():
+            return redirect(url_for("authentication_bp.login"))
+        repo = _repo()
+        user = repo.get_user_by_username(session.get("username"))
+        if not user or not user.admin:
+            return redirect(url_for("home_bp.home"))
+        return view(**kwargs)
+
+    return wrapped_view
 
 @authentication_blueprint.route("/register", methods=["GET", "POST"])
 def register():
