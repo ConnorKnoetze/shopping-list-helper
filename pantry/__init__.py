@@ -77,6 +77,6 @@ def create_app():
 
     @app.context_processor
     def inject_user():
-        return {"current_user": get_current_user()}
+        return {"current_user": get_current_user() if get_current_user() else None}
 
     return app
