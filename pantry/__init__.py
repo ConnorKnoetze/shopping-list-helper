@@ -18,6 +18,7 @@ from pantry.blueprints.services import _repo
 
 from pantry.adapters.database_repository import SqlAlchemyRepository
 
+
 def create_app():
     from flask import Flask
 
@@ -78,5 +79,22 @@ def create_app():
     @app.context_processor
     def inject_user():
         return {"current_user": get_current_user() if get_current_user() else None}
+
+    # Ensure we cleanup DB sessions after each request to avoid pending rollbacks
+    @app.teardown_appcontext
+    def cleanup_db_session(exception=None):
+        try:
+            repo = repository.repo_instance
+            if repo is not None and hasattr(repo, "_session_cm"):
+                try:
+                    repo._session_cm.close_current_session()
+                except Exception:
+                    # ensure any leftover rollback is done
+                    try:
+                        repo._session_cm.rollback()
+                    except Exception:
+                        pass
+        except Exception:
+            pass
 
     return app

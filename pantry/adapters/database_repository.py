@@ -30,25 +30,60 @@ class SessionContextManager:
         return self.__session()
 
     def commit(self) -> object:
-        self.__session.commit()
+        try:
+            self.__session.commit()
+        except Exception:
+            try:
+                self.rollback()
+            except Exception:
+                pass
+            raise
 
     def rollback(self):
-        self.__session.rollback()
+        try:
+            self.__session.rollback()
+        except Exception:
+            pass
+        try:
+            if hasattr(self.__session, "remove"):
+                self.__session.remove()
+        except Exception:
+            pass
 
     def reset_session(self):
         self.close_current_session()
         self.__session = scoped_session(self.__session_factory)
 
     def close_current_session(self):
-        if self.__session is not None:
-            self.__session.close()
+        try:
+            if hasattr(self.__session, "remove"):
+                self.__session.remove()
+            else:
+                cur = None
+                try:
+                    cur = self.__session()
+                except Exception:
+                    cur = None
+                if cur is not None:
+                    try:
+                        cur.close()
+                    except Exception:
+                        pass
+        except Exception:
+            pass
 
 
 class SqlAlchemyRepository(AbstractRepository):
     def __init__(self, session_factory, database_uri: str):
         self._session_cm = SessionContextManager(session_factory)
-        self._engine = create_engine(database_uri, future=True)
-        self._session_factory = sessionmaker(bind=self._engine, expire_on_commit=False)
+
+        bound_engine = getattr(session_factory, "bind", None)
+        if bound_engine is not None:
+            self._engine = bound_engine
+        else:
+            self._engine = create_engine(database_uri, future=True, pool_pre_ping=True)
+
+        self._session_factory = session_factory
 
         from pantry.adapters import orm as _orm
 
@@ -57,7 +92,6 @@ class SqlAlchemyRepository(AbstractRepository):
     def add_ingredient(self, ingredient):
         session = self._session_cm.session
         ingr_model = self._orm.ensure_ingredient(session, ingredient.name)
-        # persist unit and UI range/step values from domain Ingredient
         try:
             if hasattr(ingredient, 'unit') and ingredient.unit is not None:
                 ingr_model.unit = ingredient.unit
